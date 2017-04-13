@@ -13,4 +13,6 @@
 
 + (id)analysisWithURL:(NSURL *)url;
 
+//- (NSDictionary *)backDictinary;
+//- (instancetype)initAnalysisWithURL:(NSURL *)url;
 @end
