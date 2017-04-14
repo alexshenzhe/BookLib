@@ -8,11 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+@class JSONAnalysis;
+@protocol JSONAnalysisDelegate <NSObject>
+
+@optional
+- (void)JSONAnalysisSuccess:(JSONAnalysis *)jsonAnalysis dictionary:(NSDictionary *)dic;
+
+@end
+
 @class DoubanData;
 @interface JSONAnalysis : NSObject
 
-+ (id)analysisWithURL:(NSURL *)url;
+@property (nonatomic, weak) id<JSONAnalysisDelegate> delegate;
 
-//- (NSDictionary *)backDictinary;
-//- (instancetype)initAnalysisWithURL:(NSURL *)url;
+- (instancetype)initAnalysisWithURL:(NSURL *)url;
+
 @end

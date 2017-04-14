@@ -32,6 +32,10 @@
     [self.contentView addSubview:_bookNameLabel];
 }
 
+
+/**
+ 设置子控件frame
+ */
 - (void)layoutSubviews {
     float imageX = 0;
     float imageY = 0;

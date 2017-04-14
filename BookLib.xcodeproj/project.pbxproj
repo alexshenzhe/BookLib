@@ -13,6 +13,7 @@
 		FA1C6A5D1E9E804900D0A5D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA1C6A5B1E9E804900D0A5D5 /* Main.storyboard */; };
 		FA1C6A5F1E9E804900D0A5D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA1C6A5E1E9E804900D0A5D5 /* Assets.xcassets */; };
 		FA1C6A621E9E804900D0A5D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA1C6A601E9E804900D0A5D5 /* LaunchScreen.storyboard */; };
+		FA30982A1EA11088002B108E /* CameraReadController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3098291EA11088002B108E /* CameraReadController.m */; };
 		FA3F20CD1E9E814A000937D6 /* BookInfoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C01E9E814A000937D6 /* BookInfoViewCell.m */; };
 		FA3F20CE1E9E814A000937D6 /* DoubanData.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C21E9E814A000937D6 /* DoubanData.m */; };
 		FA3F20D01E9E814A000937D6 /* JSONAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C51E9E814A000937D6 /* JSONAnalysis.m */; };
@@ -31,6 +32,9 @@
 		FA1C6A5E1E9E804900D0A5D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA1C6A611E9E804900D0A5D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FA1C6A631E9E804900D0A5D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA3098261EA10F01002B108E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FA3098281EA11088002B108E /* CameraReadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraReadController.h; sourceTree = "<group>"; };
+		FA3098291EA11088002B108E /* CameraReadController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraReadController.m; sourceTree = "<group>"; };
 		FA3F20BF1E9E814A000937D6 /* BookInfoViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BookInfoViewCell.h; path = testProject/BookInfoViewCell.h; sourceTree = "<group>"; };
 		FA3F20C01E9E814A000937D6 /* BookInfoViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BookInfoViewCell.m; path = testProject/BookInfoViewCell.m; sourceTree = "<group>"; };
 		FA3F20C11E9E814A000937D6 /* DoubanData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoubanData.h; path = testProject/DoubanData.h; sourceTree = "<group>"; };
@@ -59,6 +63,7 @@
 			children = (
 				FA1C6A511E9E804900D0A5D5 /* BookLib */,
 				FA1C6A501E9E804900D0A5D5 /* Products */,
+				FA3098251EA10F01002B108E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,13 +96,21 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FA3098251EA10F01002B108E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FA3098261EA10F01002B108E /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FA3F20D61E9E821E000937D6 /* Class */ = {
 			isa = PBXGroup;
 			children = (
-				FA3F20DB1E9E824C000937D6 /* Other */,
 				FA3F20DA1E9E8244000937D6 /* Controller */,
 				FA3F20D91E9E8239000937D6 /* View */,
 				FA3F20D81E9E8232000937D6 /* Model */,
+				FA3F20DB1E9E824C000937D6 /* Other */,
 			);
 			name = Class;
 			sourceTree = "<group>";
@@ -127,6 +140,8 @@
 			children = (
 				FA1C6A581E9E804900D0A5D5 /* ViewController.h */,
 				FA1C6A591E9E804900D0A5D5 /* ViewController.m */,
+				FA3098281EA11088002B108E /* CameraReadController.h */,
+				FA3098291EA11088002B108E /* CameraReadController.m */,
 				FAFD2A5F1E9F92560078247D /* BooksNavController.h */,
 				FAFD2A601E9F92560078247D /* BooksNavController.m */,
 			);
@@ -222,6 +237,7 @@
 				FA3F20CE1E9E814A000937D6 /* DoubanData.m in Sources */,
 				FA1C6A5A1E9E804900D0A5D5 /* ViewController.m in Sources */,
 				FA1C6A571E9E804900D0A5D5 /* AppDelegate.m in Sources */,
+				FA30982A1EA11088002B108E /* CameraReadController.m in Sources */,
 				FA1C6A541E9E804900D0A5D5 /* main.m in Sources */,
 				FA4DD6281E9FC0D600E6BF78 /* MBProgressHUD.m in Sources */,
 			);
