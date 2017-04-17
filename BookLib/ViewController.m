@@ -8,18 +8,19 @@
 
 #import "ViewController.h"
 #import "JSONAnalysis.h"
-#import "BookInfoViewCell.h"
+#import "BookInfoCollectionViewCell.h"
 #import "BooksNavController.h"
 #import "MBProgressHUD.h"
-#import "CameraReadController.h"
-//#import "DoubanData.h"
+#import "CameraCaptureController.h"
+#import "BooksCollectionViewController.h"
 
-@interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, JSONAnalysisDelegate, CameraReadControllerDelegate>
+@interface ViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate>
 
-@property (nonatomic, strong) UICollectionView *collectionView;
+//@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) BooksCollectionViewController *collectionViewController;
 @property (nonatomic, strong) NSMutableArray *bookArray; // 存放书本信息
-@property (nonatomic, strong) JSONAnalysis *jsonana;
-//@property (nonatomic, copy) NSDictionary *dic; // 存放当前解析出来的字典
+@property (nonatomic, strong) JSONAnalysis *jsonAnalysis;
+
 @end
 
 @implementation ViewController
@@ -35,31 +36,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/**
-  设置子控件的frame
- */
-- (void)subviewsFrame {
-    // 设置导航栏按钮及文字
-    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteBookInfo)];
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
-    self.navigationItem.leftBarButtonItem = deleteButton;
-    self.navigationItem.rightBarButtonItem = addButton;
-    self.title = @"BOOKLib";
-    // collection & layout
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.itemSize = CGSizeMake(150, 200);
-    layout.minimumInteritemSpacing = 10;
-    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    layout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5);
-    
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 270) collectionViewLayout:layout];
-    [self.collectionView registerClass:[BookInfoViewCell class] forCellWithReuseIdentifier:@"collectionCell"];
-    self.collectionView.dataSource = self;
-    self.collectionView.delegate = self;
-    self.collectionView.backgroundColor = [UIColor blueColor];
-    [self.view addSubview:self.collectionView];
-}
-
 - (NSMutableArray *)bookArray {
     NSLog(@"setbookArray");
     if (_bookArray == nil) {
@@ -68,8 +44,6 @@
         NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
         NSMutableArray *array = [NSMutableArray array];
         for (NSDictionary *dic in dicArray) {
-            //            DoubanData *doubanData = [DoubanData dataWithDic:dic];
-            //            [array addObject:doubanData];
             [array addObject:dic];
         }
         _bookArray = array;
@@ -77,9 +51,24 @@
     return _bookArray;
 }
 
+/**
+ 设置子控件的frame
+ */
+- (void)subviewsFrame {
+    // 设置导航栏按钮及文字
+    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteBookInfo)];
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
+    self.navigationItem.leftBarButtonItem = deleteButton;
+    self.navigationItem.rightBarButtonItem = addButton;
+    self.title = @"BOOKLib";
+    
+    // 创建collection
+    self.collectionViewController = [[BooksCollectionViewController alloc] init];
+    [self.view addSubview:self.collectionViewController.collectionView];
+}
 
 /**
-  显示选择提示框
+ 显示选择提示框
  */
 - (void)addBookInfo {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -87,9 +76,7 @@
         UIAlertController *inputAlertController = [UIAlertController alertControllerWithTitle:@"输入" message:@"请正确输入书本背后条形码数字" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *inputAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             UITextField *textField = inputAlertController.textFields.firstObject;
-            
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-            // Change the background view style and color.
             hud.backgroundView.style = MBProgressHUDBackgroundStyleSolidColor;
             hud.backgroundView.color = [UIColor colorWithWhite:0.f alpha:0.1f];
             [self searchBookInfoWithIsbn:textField.text];
@@ -115,27 +102,36 @@
 }
 
 /**
-  查找书本信息
+ 查找书本信息
  */
 - (void)searchBookInfoWithIsbn:(NSString *)isbnString {
     NSString *JSONString = [NSString stringWithFormat:@"https://api.douban.com/v2/book/isbn/:%@", isbnString];
-    self.jsonana = [[JSONAnalysis alloc] initAnalysisWithURL:[NSURL URLWithString:JSONString]];
-    self.jsonana.delegate = self;
-
+    self.jsonAnalysis = [[JSONAnalysis alloc] initAnalysisWithURL:[NSURL URLWithString:JSONString]];
+    self.jsonAnalysis.delegate = self;
 }
 
+/**
+ 删除书本信息
+ */
+- (void)deleteBookInfo {
+    [self.bookArray removeLastObject];
+    self.collectionViewController.bookArray = self.bookArray;
+    [self.collectionViewController.collectionView reloadData];
+    [self saveArrayToPlist:self.bookArray];
+}
 
 /**
-  扫描条形码
+ 扫描条形码
  */
 - (void)captureIsbnByCamera {
-    CameraReadController *cameraRead = [[CameraReadController alloc] init];
-    [self.navigationController pushViewController:cameraRead animated:YES];
-    cameraRead.delegate = self;
+    CameraCaptureController *cameraCapture = [[CameraCaptureController alloc] init];
+    [self.navigationController pushViewController:cameraCapture animated:YES];
+    [cameraCapture cameraStartCapture];
+    cameraCapture.delegate = self;
 }
 
 /**
-  保存
+ 保存到plist文件
  */
 - (void)saveArrayToPlist:(NSMutableArray *)array {
     NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userBook.plist"];
@@ -145,35 +141,24 @@
         [self errorHUDWithString:@"保存失败！"];
     }
 }
+
 /**
-  显示错误文字提示框
+ 显示错误文字提示框
 */
 - (void)errorHUDWithString:(NSString *)string {
     dispatch_async(dispatch_get_main_queue(), ^{
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-        // Set the text mode to show only text.
+        // 设置显示模式
         hud.mode = MBProgressHUDModeText;
         hud.label.text = string;
-        // Move to bottm center.
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
-        
         [hud hideAnimated:YES afterDelay:2.f];
     });
 }
 
-
-/**
-  删除书本信息
- */
-- (void)deleteBookInfo {
-    [self.bookArray removeLastObject];
-    [self.collectionView reloadData];
-    [self saveArrayToPlist:self.bookArray];
-}
-
 # pragma mark - CameraReadControllerDelegate
 
-- (void)cameraCaptureSuccess:(CameraReadController *)cameraReadController values:(NSString *)value {
+- (void)cameraCaptureSuccess:(CameraCaptureController *)cameraCaptureController values:(NSString *)value {
     NSLog(@"isbn-----%@", value);
     [self searchBookInfoWithIsbn:value];
     [self.navigationController popViewControllerAnimated:YES];
@@ -194,30 +179,8 @@
     [self.bookArray addObject:dic];
     NSLog(@"bookArray:%@", self.bookArray);
     [self saveArrayToPlist:self.bookArray];
-    [self.collectionView reloadData];
+    self.collectionViewController.bookArray = self.bookArray;
+    [self.collectionViewController.collectionView reloadData];
 }
-
-# pragma mark - UICollectionView Data Source
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.bookArray.count;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    BookInfoViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"collectionCell" forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor yellowColor];
-    NSDictionary *dic = [NSDictionary dictionary];
-    dic = _bookArray[indexPath.row];
-    NSURL *imageURL = [NSURL URLWithString:dic[@"images"][@"large"]];
-    cell.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-    cell.bookNameLabel.text = dic[@"title"];
-    
-    return cell;
-}
-
 
 @end

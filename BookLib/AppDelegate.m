@@ -7,8 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
 #import "BooksNavController.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -21,8 +21,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor redColor];
     
-    ViewController *viewController = [[ViewController alloc] init];
-    BooksNavController *booksNavController = [[BooksNavController alloc] initWithRootViewController:viewController];
+    ViewController *booksTableViewController = [[ViewController alloc] init];
+    BooksNavController *booksNavController = [[BooksNavController alloc] initWithRootViewController:booksTableViewController];
     self.window.rootViewController = booksNavController;
     [self.window makeKeyAndVisible];
     return YES;

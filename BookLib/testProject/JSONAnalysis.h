@@ -16,11 +16,11 @@
 
 @end
 
-@class DoubanData;
 @interface JSONAnalysis : NSObject
 
 @property (nonatomic, weak) id<JSONAnalysisDelegate> delegate;
 
 - (instancetype)initAnalysisWithURL:(NSURL *)url;
++ (instancetype)analysisWithURL:(NSURL *)url;
 
 @end

@@ -10,8 +10,6 @@
 #import "DoubanData.h"
 
 @interface JSONAnalysis () <NSURLSessionDataDelegate>
-@property (nonatomic, strong) NSMutableArray *bookArray; // to save book info
-@property (nonatomic, copy) NSDictionary *dic; // to save the dictionary from JSON
 @end
 
 @implementation JSONAnalysis
@@ -30,29 +28,38 @@
     return self;
 }
 
++ (instancetype)analysisWithURL:(NSURL *)url {
+    return [[self alloc] initAnalysisWithURL:url];
+}
+
 #pragma mark - NSURLSessionDataDelegate
 
-// 接收到服务器的响应
+/**
+ 接收到服务器的响应
+ */
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler {
     // 允许处理服务器的响应，才会继续接收服务器返回的数据
     completionHandler(NSURLSessionResponseAllow);
 }
 
-// 接收到服务器的数据
+/**
+ 接收到服务器的数据
+ */
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
     NSLog(@"1.%@", session);
     NSLog(@"2.%@", dataTask);
     NSError *error = nil;
-    self.dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-    
-    // call delegate
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+    // 通知代理
     if ([self.delegate respondsToSelector:@selector(JSONAnalysisSuccess:dictionary:)]) {
-        [self.delegate JSONAnalysisSuccess:self dictionary:self.dic];
+        [self.delegate JSONAnalysisSuccess:self dictionary:dic];
     }
-    NSLog(@"3.%@", self.dic);
+    NSLog(@"3.%@", dic);
 }
 
-// 请求成功或者失败的处理
+/**
+ 请求成功或者失败的处理
+ */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
 
 }
