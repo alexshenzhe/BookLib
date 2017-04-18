@@ -7,7 +7,7 @@
 //
 
 #import "BooksCollectionViewController.h"
-#import "BookInfoCollectionViewCell.h"
+#import "BooksCollectionViewCell.h"
 
 @interface BooksCollectionViewController ()
 @end
@@ -19,8 +19,8 @@ static NSString *const reuseIdentifier = @"collectionCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.collectionView registerClass:[BookInfoCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    self.collectionView.frame = CGRectMake(0, 0, self.view.frame.size.width, 270);
+    [self.collectionView registerClass:[BooksCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    self.collectionView.frame = CGRectMake(0, 0, self.collectionView.superview.frame.size.width, 270);
     self.collectionView.backgroundColor = [UIColor blueColor];
 }
 
@@ -29,9 +29,9 @@ static NSString *const reuseIdentifier = @"collectionCell";
     // Dispose of any resources that can be recreated.
 }
 
-- (NSMutableArray *)bookArray {
+- (NSMutableArray *)favoriteBookArray {
     NSLog(@"setbookArray");
-    if (_bookArray == nil) {
+    if (_favoriteBookArray == nil) {
         NSLog(@"in setbookArray");
         NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userBook.plist"];
         NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
@@ -39,9 +39,9 @@ static NSString *const reuseIdentifier = @"collectionCell";
         for (NSDictionary *dic in dicArray) {
             [array addObject:dic];
         }
-        _bookArray = array;
+        _favoriteBookArray = array;
     }
-    return _bookArray;
+    return _favoriteBookArray;
 }
 
 - (instancetype)init {
@@ -73,20 +73,21 @@ static NSString *const reuseIdentifier = @"collectionCell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.bookArray.count;
+    return self.favoriteBookArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    BookInfoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    BooksCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    if (cell == nil) {
+        cell = [[BooksCollectionViewCell alloc] init];
+    }
     cell.backgroundColor = [UIColor yellowColor];
     NSDictionary *dic = [NSDictionary dictionary];
-    dic = _bookArray[indexPath.row];
+    dic = _favoriteBookArray[indexPath.row];
     NSLog(@"dicdicdicdic:%@", dic[@"title"]);
     NSURL *imageURL = [NSURL URLWithString:dic[@"images"][@"large"]];
-//    cell.bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-//    cell.bookName = dic[@"title"];
-    cell.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-    cell.bookNameLabel.text = dic[@"title"];
+    cell.bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+    cell.bookName = dic[@"title"];
     return cell;
 }
 

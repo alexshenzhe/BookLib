@@ -10,6 +10,6 @@
 
 @interface BooksCollectionViewController : UICollectionViewController
 
-@property (nonatomic, strong) NSMutableArray *bookArray; // 存放书本信息
+@property (nonatomic, strong) NSMutableArray *favoriteBookArray; // 存放书本信息
 
 @end

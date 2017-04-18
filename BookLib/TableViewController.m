@@ -1,27 +1,31 @@
 //
-//  ViewController.m
+//  TableViewController.m
 //  BookLib
 //
-//  Created by 沈喆 on 17/4/12.
+//  Created by 沈喆 on 17/4/17.
 //  Copyright © 2017年 沈喆. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "TableViewController.h"
+#import "TableViewCell.h"
 #import "JSONAnalysis.h"
 #import "BooksNavController.h"
 #import "MBProgressHUD.h"
 #import "CameraCaptureController.h"
 #import "BooksCollectionViewController.h"
 
-@interface ViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate>
+@interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate>
 
 @property (nonatomic, strong) BooksCollectionViewController *collectionViewController;
 @property (nonatomic, strong) NSMutableArray *favoriteBookArray; // 存放书本信息
 @property (nonatomic, strong) JSONAnalysis *jsonAnalysis;
+@property (nonatomic, strong) TableViewCell *tableViewCell;
 
 @end
 
-@implementation ViewController
+@implementation TableViewController
+
+static NSString *const reuseIdentifier = @"tableViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,7 +38,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (NSMutableArray *)bookArray {
+- (NSMutableArray *)favoriteBookArray {
     NSLog(@"setbookArray");
     if (_favoriteBookArray == nil) {
         NSLog(@"in setbookArray");
@@ -49,6 +53,10 @@
     return _favoriteBookArray;
 }
 
+- (instancetype)initWithStyle:(UITableViewStyle)style {
+    return [super initWithStyle:UITableViewStyleGrouped];
+}
+
 /**
  设置子控件的frame
  */
@@ -59,10 +67,6 @@
     self.navigationItem.leftBarButtonItem = deleteButton;
     self.navigationItem.rightBarButtonItem = addButton;
     self.title = @"BOOKLib";
-    // 创建collection
-    self.collectionViewController = [[BooksCollectionViewController alloc] init];
-//    self.collectionViewController.collectionView.frame = CGRectMake(0, 0, self.view.frame.size.width, 270);
-    [self.view addSubview:self.collectionViewController.collectionView];
 }
 
 /**
@@ -121,12 +125,12 @@
     [self saveArrayToPlist:self.favoriteBookArray];
 }
 
-
 /**
  刷新页面数据
  */
 - (void)updateViewData {
     [self.collectionViewController.collectionView reloadData];
+    [self.tableView reloadData];
 }
 
 /**
@@ -155,7 +159,7 @@
 
 /**
  显示错误文字提示框
-*/
+ */
 - (void)errorHUDWithString:(NSString *)string {
     dispatch_async(dispatch_get_main_queue(), ^{
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
@@ -187,10 +191,85 @@
         [self errorHUDWithString:errorString];
         return;
     }
-    [self.bookArray addObject:dic];
-    NSLog(@"bookArray:%@", self.bookArray);
-    [self saveArrayToPlist:self.bookArray];
+    [self.favoriteBookArray addObject:dic];
+    NSLog(@"bookArray:%@", self.favoriteBookArray);
+    [self saveArrayToPlist:self.favoriteBookArray];
     self.collectionViewController.favoriteBookArray = self.favoriteBookArray;
 }
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    TableViewCell *tableViewCell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    return tableViewCell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 216;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *headerString = [NSString string];
+    if (section == 0) {
+        headerString = @"我喜欢的图书";
+    }
+    return headerString;
+}
+
+/*
+// Override to support conditional editing of the table view.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
+*/
+
+/*
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }   
+}
+*/
+
+/*
+// Override to support rearranging the table view.
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+}
+*/
+
+/*
+// Override to support conditional rearranging of the table view.
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return NO if you do not want the item to be re-orderable.
+    return YES;
+}
+*/
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 @end

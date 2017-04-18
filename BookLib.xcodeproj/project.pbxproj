@@ -14,11 +14,13 @@
 		FA1C6A5F1E9E804900D0A5D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA1C6A5E1E9E804900D0A5D5 /* Assets.xcassets */; };
 		FA1C6A621E9E804900D0A5D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA1C6A601E9E804900D0A5D5 /* LaunchScreen.storyboard */; };
 		FA30982A1EA11088002B108E /* CameraCaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3098291EA11088002B108E /* CameraCaptureController.m */; };
-		FA3F20CD1E9E814A000937D6 /* BookInfoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C01E9E814A000937D6 /* BookInfoCollectionViewCell.m */; };
+		FA3F20CD1E9E814A000937D6 /* BooksCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C01E9E814A000937D6 /* BooksCollectionViewCell.m */; };
 		FA3F20CE1E9E814A000937D6 /* DoubanData.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C21E9E814A000937D6 /* DoubanData.m */; };
 		FA3F20D01E9E814A000937D6 /* JSONAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C51E9E814A000937D6 /* JSONAnalysis.m */; };
 		FA4DD6281E9FC0D600E6BF78 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4DD6271E9FC0D600E6BF78 /* MBProgressHUD.m */; };
 		FAB347D41EA4D38F0069D02A /* BooksCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB347D31EA4D38F0069D02A /* BooksCollectionViewController.m */; };
+		FAB347D71EA510C00069D02A /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB347D61EA510C00069D02A /* TableViewController.m */; };
+		FAB347DA1EA511240069D02A /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB347D91EA511240069D02A /* TableViewCell.m */; };
 		FAFD2A611E9F92560078247D /* BooksNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFD2A601E9F92560078247D /* BooksNavController.m */; };
 /* End PBXBuildFile section */
 
@@ -36,8 +38,8 @@
 		FA3098261EA10F01002B108E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FA3098281EA11088002B108E /* CameraCaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraCaptureController.h; sourceTree = "<group>"; };
 		FA3098291EA11088002B108E /* CameraCaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraCaptureController.m; sourceTree = "<group>"; };
-		FA3F20BF1E9E814A000937D6 /* BookInfoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BookInfoCollectionViewCell.h; path = testProject/BookInfoCollectionViewCell.h; sourceTree = "<group>"; };
-		FA3F20C01E9E814A000937D6 /* BookInfoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BookInfoCollectionViewCell.m; path = testProject/BookInfoCollectionViewCell.m; sourceTree = "<group>"; };
+		FA3F20BF1E9E814A000937D6 /* BooksCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BooksCollectionViewCell.h; path = testProject/BooksCollectionViewCell.h; sourceTree = "<group>"; };
+		FA3F20C01E9E814A000937D6 /* BooksCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BooksCollectionViewCell.m; path = testProject/BooksCollectionViewCell.m; sourceTree = "<group>"; };
 		FA3F20C11E9E814A000937D6 /* DoubanData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoubanData.h; path = testProject/DoubanData.h; sourceTree = "<group>"; };
 		FA3F20C21E9E814A000937D6 /* DoubanData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DoubanData.m; path = testProject/DoubanData.m; sourceTree = "<group>"; };
 		FA3F20C41E9E814A000937D6 /* JSONAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSONAnalysis.h; path = testProject/JSONAnalysis.h; sourceTree = "<group>"; };
@@ -46,6 +48,10 @@
 		FA4DD6271E9FC0D600E6BF78 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		FAB347D21EA4D38F0069D02A /* BooksCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooksCollectionViewController.h; sourceTree = "<group>"; };
 		FAB347D31EA4D38F0069D02A /* BooksCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooksCollectionViewController.m; sourceTree = "<group>"; };
+		FAB347D51EA510C00069D02A /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
+		FAB347D61EA510C00069D02A /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
+		FAB347D81EA511240069D02A /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
+		FAB347D91EA511240069D02A /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
 		FAFD2A5F1E9F92560078247D /* BooksNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooksNavController.h; sourceTree = "<group>"; };
 		FAFD2A601E9F92560078247D /* BooksNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooksNavController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,8 +138,10 @@
 		FA3F20D91E9E8239000937D6 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				FA3F20BF1E9E814A000937D6 /* BookInfoCollectionViewCell.h */,
-				FA3F20C01E9E814A000937D6 /* BookInfoCollectionViewCell.m */,
+				FA3F20BF1E9E814A000937D6 /* BooksCollectionViewCell.h */,
+				FA3F20C01E9E814A000937D6 /* BooksCollectionViewCell.m */,
+				FAB347D81EA511240069D02A /* TableViewCell.h */,
+				FAB347D91EA511240069D02A /* TableViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -143,6 +151,8 @@
 			children = (
 				FA1C6A581E9E804900D0A5D5 /* ViewController.h */,
 				FA1C6A591E9E804900D0A5D5 /* ViewController.m */,
+				FAB347D51EA510C00069D02A /* TableViewController.h */,
+				FAB347D61EA510C00069D02A /* TableViewController.m */,
 				FAB347D21EA4D38F0069D02A /* BooksCollectionViewController.h */,
 				FAB347D31EA4D38F0069D02A /* BooksCollectionViewController.m */,
 				FA3098281EA11088002B108E /* CameraCaptureController.h */,
@@ -236,8 +246,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAB347D71EA510C00069D02A /* TableViewController.m in Sources */,
+				FAB347DA1EA511240069D02A /* TableViewCell.m in Sources */,
 				FAFD2A611E9F92560078247D /* BooksNavController.m in Sources */,
-				FA3F20CD1E9E814A000937D6 /* BookInfoCollectionViewCell.m in Sources */,
+				FA3F20CD1E9E814A000937D6 /* BooksCollectionViewCell.m in Sources */,
 				FA3F20D01E9E814A000937D6 /* JSONAnalysis.m in Sources */,
 				FA3F20CE1E9E814A000937D6 /* DoubanData.m in Sources */,
 				FA1C6A5A1E9E804900D0A5D5 /* ViewController.m in Sources */,

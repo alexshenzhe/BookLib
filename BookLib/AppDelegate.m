@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "BooksNavController.h"
 #import "ViewController.h"
+#import "TableViewController.h"
 
 @interface AppDelegate ()
 
@@ -21,8 +22,9 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor redColor];
     
-    ViewController *booksTableViewController = [[ViewController alloc] init];
-    BooksNavController *booksNavController = [[BooksNavController alloc] initWithRootViewController:booksTableViewController];
+    TableViewController *booksViewController = [[TableViewController alloc] init];
+//    ViewController *booksViewController = [[ViewController alloc] init];
+    BooksNavController *booksNavController = [[BooksNavController alloc] initWithRootViewController:booksViewController];
     self.window.rootViewController = booksNavController;
     [self.window makeKeyAndVisible];
     return YES;
