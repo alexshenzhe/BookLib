@@ -17,7 +17,9 @@
 @interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate>
 
 @property (nonatomic, strong) BooksCollectionViewController *collectionViewController;
-@property (nonatomic, strong) NSMutableArray *favoriteBookArray; // 存放书本信息
+@property (nonatomic, strong) NSMutableArray *favoriteBookArray; // 存放喜爱的书本信息
+@property (nonatomic, strong) NSMutableArray *readingBookArray; // 存放正在读的书本信息
+@property (nonatomic, strong) NSMutableArray *haveReadBookArray; // 存放已读书本信息
 @property (nonatomic, strong) JSONAnalysis *jsonAnalysis;
 @property (nonatomic, strong) TableViewCell *tableViewCell;
 
@@ -29,7 +31,6 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"viewDidLoad");
     [self subviewsFrame];
 }
 
@@ -39,9 +40,7 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 }
 
 - (NSMutableArray *)favoriteBookArray {
-    NSLog(@"setbookArray");
     if (_favoriteBookArray == nil) {
-        NSLog(@"in setbookArray");
         NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userBook.plist"];
         NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
         NSMutableArray *array = [NSMutableArray array];
@@ -51,6 +50,32 @@ static NSString *const reuseIdentifier = @"tableViewCell";
         _favoriteBookArray = array;
     }
     return _favoriteBookArray;
+}
+
+- (NSMutableArray *)haveReadBookArray {
+    if (_haveReadBookArray == nil) {
+        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/haveReadBook.plist"];
+        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSDictionary *dic in dicArray) {
+            [array addObject:dic];
+        }
+        _haveReadBookArray = array;
+    }
+    return _haveReadBookArray;
+}
+
+- (NSMutableArray *)readingBookArray {
+    if (_readingBookArray == nil) {
+        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/readingBook.plist"];
+        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSDictionary *dic in dicArray) {
+            [array addObject:dic];
+        }
+        _readingBookArray = array;
+    }
+    return _readingBookArray;
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
@@ -121,7 +146,6 @@ static NSString *const reuseIdentifier = @"tableViewCell";
  */
 - (void)deleteBookInfo {
     [self.favoriteBookArray removeLastObject];
-    self.collectionViewController.favoriteBookArray = self.favoriteBookArray;
     [self saveArrayToPlist:self.favoriteBookArray];
 }
 
@@ -149,6 +173,7 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 - (void)saveArrayToPlist:(NSMutableArray *)array {
     NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userBook.plist"];
     NSLog(@"%@", path);
+    NSLog(@"array---%@", array);
     BOOL success = [array writeToFile:path atomically:YES];
     if (! success) {
         [self errorHUDWithString:@"保存失败！"];
@@ -183,8 +208,7 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 
 - (void)JSONAnalysisSuccess:(JSONAnalysis *)jsonAnalysis dictionary:(NSDictionary *)dic {
     NSString *errorCode = dic[@"code"];
-    NSLog(@"delegate:%@--------code:%@", dic, dic[@"code"]);
-    NSLog(@"self.errorCode:%@", errorCode);
+    NSLog(@"delegateback:%@--------code:%@", dic, dic[@"code"]);
     if (errorCode) {
         NSString *errorString = [NSString stringWithFormat:@"查询错误，错误代码为%@", errorCode];
         NSLog(@"errorString%@", errorString);
@@ -194,13 +218,12 @@ static NSString *const reuseIdentifier = @"tableViewCell";
     [self.favoriteBookArray addObject:dic];
     NSLog(@"bookArray:%@", self.favoriteBookArray);
     [self saveArrayToPlist:self.favoriteBookArray];
-    self.collectionViewController.favoriteBookArray = self.favoriteBookArray;
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -208,12 +231,13 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TableViewCell *tableViewCell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-    return tableViewCell;
+    self.tableViewCell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    self.tableViewCell.collectionViewController.bookSection = indexPath.section;
+    return self.tableViewCell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 216;
+    return 314;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -224,6 +248,10 @@ static NSString *const reuseIdentifier = @"tableViewCell";
     NSString *headerString = [NSString string];
     if (section == 0) {
         headerString = @"我喜欢的图书";
+    } else if (section == 1) {
+        headerString = @"我正在阅读的图书";
+    } else if (section == 2){
+        headerString = @"我已经阅读的图书";
     }
     return headerString;
 }
