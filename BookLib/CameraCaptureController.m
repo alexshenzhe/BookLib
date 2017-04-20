@@ -21,16 +21,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [self cameraStartCapture];
     [self cameraCaptureArea];
-    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 /**
  扫描条形码方法
@@ -70,7 +67,6 @@
         //开始捕获
         [self.session startRunning];
     }
-    
 }
 
 /**

@@ -11,8 +11,6 @@
 
 @interface TableViewCell ()
 
-
-
 @end
 
 @implementation TableViewCell
@@ -35,12 +33,12 @@
         self.collectionViewController = [[BooksCollectionViewController alloc] init];
         self.collectionViewController.collectionView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         [self.contentView addSubview:self.collectionViewController.collectionView];
+        NSLog(@"2.%@", self.collectionViewController);
+        
+        NSLog(@"2.collectionView=%@", self.collectionViewController.collectionView);
+        
     }
     return self;
 }
-
-
-
-
 
 @end

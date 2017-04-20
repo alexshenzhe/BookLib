@@ -98,7 +98,6 @@ static NSString *const reuseIdentifier = @"collectionCell";
     return 1;
 }
 
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return [self whichSectionForBooksArray].count;
 }
@@ -121,36 +120,27 @@ static NSString *const reuseIdentifier = @"collectionCell";
     return cell;
 }
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
-
 #pragma mark <UICollectionViewDelegate>
 
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-
-// Uncomment this method to specify if the specified item should be selected
+/**
+ 点击事件处理
+ */
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *dic = [NSDictionary dictionary];
     NSMutableArray *array = [NSMutableArray array];
     array = [self whichSectionForBooksArray];
     dic = array[indexPath.row];
     NSLog(@"我选择了NO.%ld，title:%@", indexPath.row, dic[@"title"]);
+    NSLog(@"1.collectionView=%@", collectionView);
     return YES;
 }
 
+/*
+ // Uncomment this method to specify if the specified item should be highlighted during tracking
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+	return YES;
+ }
+ */
 
 /*
 // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
@@ -166,5 +156,15 @@ static NSString *const reuseIdentifier = @"collectionCell";
 	
 }
 */
+
+/*
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

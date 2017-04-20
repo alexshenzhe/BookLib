@@ -14,5 +14,4 @@
 @property (nonatomic, strong) NSMutableArray *readingBookArray; // 存放正在读的书本信息
 @property (nonatomic, strong) NSMutableArray *haveReadBookArray; // 存放已读书本信息
 @property (nonatomic, assign) NSInteger bookSection;
-
 @end

@@ -12,5 +12,4 @@
 @interface TableViewCell : UITableViewCell
 
 @property (nonatomic, strong) BooksCollectionViewController *collectionViewController;
-
 @end

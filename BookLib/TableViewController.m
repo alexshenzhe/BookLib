@@ -13,6 +13,8 @@
 #import "MBProgressHUD.h"
 #import "CameraCaptureController.h"
 #import "BooksCollectionViewController.h"
+#import "BooksCollectionViewCell.h"
+#import "DetailViewController.h"
 
 @interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate>
 
@@ -31,6 +33,9 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.collectionViewController = [[BooksCollectionViewController alloc] init];
+    NSLog(@"====%@", self.collectionViewController);
+    NSLog(@"3.collectionView=%@", self.collectionViewController.collectionView);
     [self subviewsFrame];
 }
 

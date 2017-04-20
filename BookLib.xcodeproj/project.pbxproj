@@ -21,6 +21,7 @@
 		FAB347D41EA4D38F0069D02A /* BooksCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB347D31EA4D38F0069D02A /* BooksCollectionViewController.m */; };
 		FAB347D71EA510C00069D02A /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB347D61EA510C00069D02A /* TableViewController.m */; };
 		FAB347DA1EA511240069D02A /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB347D91EA511240069D02A /* TableViewCell.m */; };
+		FAE682E91EA8F3AC0085DC62 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE682E81EA8F3AC0085DC62 /* DetailViewController.m */; };
 		FAFD2A611E9F92560078247D /* BooksNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFD2A601E9F92560078247D /* BooksNavController.m */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +53,8 @@
 		FAB347D61EA510C00069D02A /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
 		FAB347D81EA511240069D02A /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
 		FAB347D91EA511240069D02A /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
+		FAE682E71EA8F3AC0085DC62 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		FAE682E81EA8F3AC0085DC62 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		FAFD2A5F1E9F92560078247D /* BooksNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooksNavController.h; sourceTree = "<group>"; };
 		FAFD2A601E9F92560078247D /* BooksNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooksNavController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,6 +156,8 @@
 				FA1C6A591E9E804900D0A5D5 /* ViewController.m */,
 				FAB347D51EA510C00069D02A /* TableViewController.h */,
 				FAB347D61EA510C00069D02A /* TableViewController.m */,
+				FAE682E71EA8F3AC0085DC62 /* DetailViewController.h */,
+				FAE682E81EA8F3AC0085DC62 /* DetailViewController.m */,
 				FAB347D21EA4D38F0069D02A /* BooksCollectionViewController.h */,
 				FAB347D31EA4D38F0069D02A /* BooksCollectionViewController.m */,
 				FA3098281EA11088002B108E /* CameraCaptureController.h */,
@@ -255,6 +260,7 @@
 				FA1C6A5A1E9E804900D0A5D5 /* ViewController.m in Sources */,
 				FAB347D41EA4D38F0069D02A /* BooksCollectionViewController.m in Sources */,
 				FA1C6A571E9E804900D0A5D5 /* AppDelegate.m in Sources */,
+				FAE682E91EA8F3AC0085DC62 /* DetailViewController.m in Sources */,
 				FA30982A1EA11088002B108E /* CameraCaptureController.m in Sources */,
 				FA1C6A541E9E804900D0A5D5 /* main.m in Sources */,
 				FA4DD6281E9FC0D600E6BF78 /* MBProgressHUD.m in Sources */,
