@@ -12,4 +12,7 @@
 @interface TableViewCell : UITableViewCell
 
 @property (nonatomic, strong) BooksCollectionViewController *collectionViewController;
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier collectionViewController:(BooksCollectionViewController *)collectionViewController;
+
 @end

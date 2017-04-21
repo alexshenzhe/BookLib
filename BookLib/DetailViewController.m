@@ -16,7 +16,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     NSLog(@"DetailViewController");
+    self.title = @"XXXX";
     [self subviewsFrame];
 }
 

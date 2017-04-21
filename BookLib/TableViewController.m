@@ -16,9 +16,11 @@
 #import "BooksCollectionViewCell.h"
 #import "DetailViewController.h"
 
-@interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate>
+@interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate, BooksCollectionViewControllerDelegate, UICollectionViewDelegate>
 
-@property (nonatomic, strong) BooksCollectionViewController *collectionViewController;
+@property (nonatomic, strong) BooksCollectionViewController *favoriteCollectionViewController;
+@property (nonatomic, strong) BooksCollectionViewController *readingCollectionViewController;
+@property (nonatomic, strong) BooksCollectionViewController *haveReadCollectionViewController;
 @property (nonatomic, strong) NSMutableArray *favoriteBookArray; // 存放喜爱的书本信息
 @property (nonatomic, strong) NSMutableArray *readingBookArray; // 存放正在读的书本信息
 @property (nonatomic, strong) NSMutableArray *haveReadBookArray; // 存放已读书本信息
@@ -33,9 +35,11 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.collectionViewController = [[BooksCollectionViewController alloc] init];
-    NSLog(@"====%@", self.collectionViewController);
-    NSLog(@"3.collectionView=%@", self.collectionViewController.collectionView);
+    
+    self.favoriteCollectionViewController = [[BooksCollectionViewController alloc] init];
+    self.readingCollectionViewController = [[BooksCollectionViewController alloc] init];
+    self.haveReadCollectionViewController = [[BooksCollectionViewController alloc] init];
+
     [self subviewsFrame];
 }
 
@@ -158,7 +162,7 @@ static NSString *const reuseIdentifier = @"tableViewCell";
  刷新页面数据
  */
 - (void)updateViewData {
-    [self.collectionViewController.collectionView reloadData];
+    [self.favoriteCollectionViewController.collectionView reloadData];
     [self.tableView reloadData];
 }
 
@@ -201,6 +205,14 @@ static NSString *const reuseIdentifier = @"tableViewCell";
     });
 }
 
+# pragma mark - BooksCollectionViewControllerDelegate
+
+- (void)booksConllectionViewController:(BooksCollectionViewController *)booksConllectionViewController didSelectAtItemIndexPath:(NSIndexPath *)indexPath withData:(NSDictionary *)dic {
+    NSLog(@"我选择了NO.%ld，title:%@", indexPath.row, dic[@"title"]);
+    DetailViewController *detailViewController = [[DetailViewController alloc] init];
+    [self.navigationController pushViewController:detailViewController animated:YES];
+}
+
 # pragma mark - CameraReadControllerDelegate
 
 - (void)cameraCaptureSuccess:(CameraCaptureController *)cameraCaptureController values:(NSString *)value {
@@ -213,7 +225,6 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 
 - (void)JSONAnalysisSuccess:(JSONAnalysis *)jsonAnalysis dictionary:(NSDictionary *)dic {
     NSString *errorCode = dic[@"code"];
-    NSLog(@"delegateback:%@--------code:%@", dic, dic[@"code"]);
     if (errorCode) {
         NSString *errorString = [NSString stringWithFormat:@"查询错误，错误代码为%@", errorCode];
         NSLog(@"errorString%@", errorString);
@@ -236,7 +247,17 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.tableViewCell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    BooksCollectionViewController *collectionViewController = [[BooksCollectionViewController alloc] init];
+    if (indexPath.section == 0) {
+        collectionViewController = self.favoriteCollectionViewController;
+    } else if (indexPath.section == 1) {
+        collectionViewController = self.readingCollectionViewController;
+    } else if (indexPath.section == 2) {
+        collectionViewController = self.haveReadCollectionViewController;
+    }
+//    self.tableViewCell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    self.tableViewCell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier collectionViewController:collectionViewController];
+    collectionViewController.delegate = self;
     self.tableViewCell.collectionViewController.bookSection = indexPath.section;
     return self.tableViewCell;
 }
@@ -252,11 +273,11 @@ static NSString *const reuseIdentifier = @"tableViewCell";
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *headerString = [NSString string];
     if (section == 0) {
-        headerString = @"我喜欢的图书";
+        headerString = @"待读";
     } else if (section == 1) {
-        headerString = @"我正在阅读的图书";
+        headerString = @"正读";
     } else if (section == 2){
-        headerString = @"我已经阅读的图书";
+        headerString = @"已读";
     }
     return headerString;
 }

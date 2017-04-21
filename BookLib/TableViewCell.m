@@ -26,6 +26,19 @@
     // Configure the view for the selected state
 }
 
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier collectionViewController:(BooksCollectionViewController *)collectionViewController {
+    self.collectionViewController = collectionViewController;
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        // 创建collection
+//        self.collectionViewController = [[BooksCollectionViewController alloc] init];
+        self.collectionViewController.collectionView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        [self.contentView addSubview:self.collectionViewController.collectionView];
+        NSLog(@"2.2.%@", self.collectionViewController);
+    }
+    return self;
+}
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -34,9 +47,6 @@
         self.collectionViewController.collectionView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         [self.contentView addSubview:self.collectionViewController.collectionView];
         NSLog(@"2.%@", self.collectionViewController);
-        
-        NSLog(@"2.collectionView=%@", self.collectionViewController.collectionView);
-        
     }
     return self;
 }

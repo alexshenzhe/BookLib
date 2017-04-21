@@ -130,8 +130,11 @@ static NSString *const reuseIdentifier = @"collectionCell";
     NSMutableArray *array = [NSMutableArray array];
     array = [self whichSectionForBooksArray];
     dic = array[indexPath.row];
-    NSLog(@"我选择了NO.%ld，title:%@", indexPath.row, dic[@"title"]);
-    NSLog(@"1.collectionView=%@", collectionView);
+    if ([self.delegate respondsToSelector:@selector(booksConllectionViewController:didSelectAtItemIndexPath:withData:)]) {
+        [self.delegate booksConllectionViewController:self didSelectAtItemIndexPath:indexPath withData:dic];
+    }
+//    NSLog(@"我选择了NO.%ld，title:%@", indexPath.row, dic[@"title"]);
+//    NSLog(@"1.collectionView=%@", collectionView);
     return YES;
 }
 
