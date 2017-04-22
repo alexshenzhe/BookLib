@@ -22,10 +22,10 @@
  */
 - (UIImageView *)bookImageView {
     if (! _bookImageView) {
-        float imageX = 0;
-        float imageY = 0;
-        float imageW = self.bounds.size.width;
-        float imageH = self.bounds.size.height - 20;
+        float imageX = 10;
+        float imageY = 10;
+        float imageW = self.bounds.size.width - 20;
+        float imageH = self.bounds.size.height - 30;
         UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
         _bookImageView = bookImageView;
         [self.contentView addSubview:bookImageView];
@@ -43,6 +43,7 @@
         bookNameLabel.textAlignment = NSTextAlignmentCenter;
         bookNameLabel.font = [UIFont systemFontOfSize:13.0];
         _bookNameLabel = bookNameLabel;
+        _bookNameLabel.backgroundColor = [UIColor redColor];
         [self.contentView addSubview:bookNameLabel];
     }
     return _bookNameLabel;

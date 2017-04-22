@@ -17,8 +17,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    NSLog(@"DetailViewController");
-    self.title = @"XXXX";
+    NSString *titleString = self.bookDic[@"title"];
+    NSLog(@"DetailViewController,dic=%@", self.bookDic[@"title"]);
+    self.title = titleString;
     [self subviewsFrame];
 }
 
@@ -32,8 +33,10 @@
  */
 - (void)subviewsFrame {
     UIImageView *bookImage = [[UIImageView alloc] init];
-    bookImage.frame = CGRectMake(0, 0, 200, 200);
+    bookImage.frame = CGRectMake(20, 84, 200, 250);
     bookImage.backgroundColor = [UIColor purpleColor];
+    NSURL *imageURL = [NSURL URLWithString:self.bookDic[@"images"][@"large"]];
+    bookImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
     [self.view addSubview:bookImage];
 }
 

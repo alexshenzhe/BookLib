@@ -15,4 +15,6 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier collectionViewController:(BooksCollectionViewController *)collectionViewController;
 
+- (void)setTableViewSection:(NSInteger)section;
+
 @end

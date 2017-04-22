@@ -15,12 +15,12 @@
 
 @implementation BooksCollectionViewController
 
-static NSString *const reuseIdentifier = @"collectionCell";
+static NSString *const reusecollectionCell = @"collectionCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.collectionView registerClass:[BooksCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    [self.collectionView registerClass:[BooksCollectionViewCell class] forCellWithReuseIdentifier:reusecollectionCell];
     self.collectionView.frame = CGRectMake(0, 0, self.collectionView.superview.frame.size.width, 314);
     self.collectionView.backgroundColor = [UIColor grayColor];
 }
@@ -32,7 +32,7 @@ static NSString *const reuseIdentifier = @"collectionCell";
 
 - (NSMutableArray *)favoriteBookArray {
     if (_favoriteBookArray == nil) {
-        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/userBook.plist"];
+        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/favoriteBook.plist"];
         NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
         NSMutableArray *array = [NSMutableArray array];
         for (NSDictionary *dic in dicArray) {
@@ -40,20 +40,9 @@ static NSString *const reuseIdentifier = @"collectionCell";
         }
         _favoriteBookArray = array;
     }
+    
+    NSLog(@"2.facorite:%ld", _favoriteBookArray.count);
     return _favoriteBookArray;
-}
-
-- (NSMutableArray *)haveReadBookArray {
-    if (_haveReadBookArray == nil) {
-        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/haveReadBook.plist"];
-        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSDictionary *dic in dicArray) {
-            [array addObject:dic];
-        }
-        _haveReadBookArray = array;
-    }
-    return _haveReadBookArray;
 }
 
 - (NSMutableArray *)readingBookArray {
@@ -69,6 +58,20 @@ static NSString *const reuseIdentifier = @"collectionCell";
     return _readingBookArray;
 }
 
+- (NSMutableArray *)haveReadBookArray {
+    if (_haveReadBookArray == nil) {
+        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/haveReadBook.plist"];
+        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSDictionary *dic in dicArray) {
+            [array addObject:dic];
+        }
+        _haveReadBookArray = array;
+    }
+    return _haveReadBookArray;
+}
+
+
 - (instancetype)init {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     if (self = [super initWithCollectionViewLayout:layout]) {
@@ -82,17 +85,17 @@ static NSString *const reuseIdentifier = @"collectionCell";
 
 - (NSMutableArray *)whichSectionForBooksArray {
     NSMutableArray *array = [NSMutableArray array];
-    if (self.bookSection == 0) {
+    if (self.tableViewSection == 0) {
         array = self.favoriteBookArray;
-    } else if (self.bookSection == 1) {
+    } else if (self.tableViewSection == 1) {
         array = self.readingBookArray;
-    } else if (self.bookSection == 2) {
+    } else if (self.tableViewSection == 2) {
         array = self.haveReadBookArray;
     }
     return array;
 }
 
-#pragma mark <UICollectionViewDataSource>
+# pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
@@ -100,17 +103,19 @@ static NSString *const reuseIdentifier = @"collectionCell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return [self whichSectionForBooksArray].count;
+//    return self.favoriteBookArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    BooksCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    BooksCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reusecollectionCell forIndexPath:indexPath];
     if (cell == nil) {
         cell = [[BooksCollectionViewCell alloc] init];
     }
-    cell.backgroundColor = [UIColor yellowColor];
+    cell.backgroundColor = [UIColor whiteColor];
     NSDictionary *dic = [NSDictionary dictionary];
     NSMutableArray *array = [NSMutableArray array];
     array = [self whichSectionForBooksArray];
+//    array = self.favoriteBookArray;
     dic = array[indexPath.row];
     
     NSLog(@"title:%@", dic[@"title"]);
@@ -120,7 +125,7 @@ static NSString *const reuseIdentifier = @"collectionCell";
     return cell;
 }
 
-#pragma mark <UICollectionViewDelegate>
+# pragma mark - UICollectionViewDelegate
 
 /**
  点击事件处理
@@ -129,6 +134,7 @@ static NSString *const reuseIdentifier = @"collectionCell";
     NSDictionary *dic = [NSDictionary dictionary];
     NSMutableArray *array = [NSMutableArray array];
     array = [self whichSectionForBooksArray];
+//    array = self.favoriteBookArray;
     dic = array[indexPath.row];
     if ([self.delegate respondsToSelector:@selector(booksConllectionViewController:didSelectAtItemIndexPath:withData:)]) {
         [self.delegate booksConllectionViewController:self didSelectAtItemIndexPath:indexPath withData:dic];

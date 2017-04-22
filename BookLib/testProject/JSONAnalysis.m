@@ -46,15 +46,14 @@
  接收到服务器的数据
  */
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
-    NSLog(@"1.%@", session);
-    NSLog(@"2.%@", dataTask);
     NSError *error = nil;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+    NSLog(@"%@", dic);
     // 通知代理
     if ([self.delegate respondsToSelector:@selector(JSONAnalysisSuccess:dictionary:)]) {
         [self.delegate JSONAnalysisSuccess:self dictionary:dic];
     }
-    NSLog(@"3.%@", dic);
+    NSLog(@"JSON解析成功，书名：%@", dic[@"title"]);
 }
 
 /**

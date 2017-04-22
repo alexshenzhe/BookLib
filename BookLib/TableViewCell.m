@@ -30,25 +30,20 @@
     self.collectionViewController = collectionViewController;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // 创建collection
-//        self.collectionViewController = [[BooksCollectionViewController alloc] init];
-        self.collectionViewController.collectionView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        // 添加collectionView
         [self.contentView addSubview:self.collectionViewController.collectionView];
-        NSLog(@"2.2.%@", self.collectionViewController);
     }
     return self;
 }
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // 创建collection
-        self.collectionViewController = [[BooksCollectionViewController alloc] init];
-        self.collectionViewController.collectionView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-        [self.contentView addSubview:self.collectionViewController.collectionView];
-        NSLog(@"2.%@", self.collectionViewController);
-    }
-    return self;
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.collectionViewController.collectionView.frame = self.contentView.frame;
+}
+
+- (void)setTableViewSection:(NSInteger)section {
+    self.collectionViewController.tableViewSection = section;
+//    [self.collectionViewController.collectionView reloadData];
 }
 
 @end

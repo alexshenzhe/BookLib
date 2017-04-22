@@ -152,8 +152,6 @@
 		FA3F20DA1E9E8244000937D6 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				FA1C6A581E9E804900D0A5D5 /* ViewController.h */,
-				FA1C6A591E9E804900D0A5D5 /* ViewController.m */,
 				FAB347D51EA510C00069D02A /* TableViewController.h */,
 				FAB347D61EA510C00069D02A /* TableViewController.m */,
 				FAE682E71EA8F3AC0085DC62 /* DetailViewController.h */,
@@ -171,6 +169,8 @@
 		FA3F20DB1E9E824C000937D6 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				FA1C6A581E9E804900D0A5D5 /* ViewController.h */,
+				FA1C6A591E9E804900D0A5D5 /* ViewController.m */,
 				FA1C6A551E9E804900D0A5D5 /* AppDelegate.h */,
 				FA1C6A561E9E804900D0A5D5 /* AppDelegate.m */,
 				FA4DD6261E9FC0D600E6BF78 /* MBProgressHUD.h */,
