@@ -43,7 +43,6 @@
 
 - (void)setTableViewSection:(NSInteger)section {
     self.collectionViewController.tableViewSection = section;
-//    [self.collectionViewController.collectionView reloadData];
 }
 
 @end

@@ -40,37 +40,37 @@
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:nil];
         [alertController addAction:okAction];
         [self presentViewController:alertController animated:YES completion:nil];
-    }else{
-        //获取摄像设备
+    } else {
+        // 获取摄像设备
         AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-        //创建输入、输出流
+        // 创建输入、输出流
         AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
         AVCaptureMetadataOutput *output = [[AVCaptureMetadataOutput alloc]init];
-        //设置代理，在主线程里刷新
+        // 设置代理，在主线程里刷新
         [output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
         // 设置识别区域
 //        output.rectOfInterest = CGRectMake(1/3, 1/4, 1/3, 1/2);
-        //初始化链接对象
+        // 初始化链接对象
         self.session = [[AVCaptureSession alloc]init];
-        //高质量采集率
+        // 高质量采集率
         [self.session setSessionPreset:AVCaptureSessionPresetHigh];
         
         [self.session addInput:input];
         [self.session addOutput:output];
-        //设置扫码的编码格式
+        // 设置扫码的编码格式
         output.metadataObjectTypes=@[AVMetadataObjectTypeQRCode,AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode128Code];
-        // 实现拍摄预览
+        // 拍摄预览
         AVCaptureVideoPreviewLayer * layer = [AVCaptureVideoPreviewLayer layerWithSession:self.session];
         layer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         layer.frame = self.view.layer.bounds;
         [self.view.layer insertSublayer:layer atIndex:0];
-        //开始捕获
+        // 开始捕获
         [self.session startRunning];
     }
 }
 
 /**
- 创建扫描区域及阴影
+ 创建扫描区域阴影
 */
 - (void)cameraCaptureArea {
     // 阴影区域

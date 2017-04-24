@@ -30,48 +30,9 @@ static NSString *const reusecollectionCell = @"collectionCell";
     // Dispose of any resources that can be recreated.
 }
 
-- (NSMutableArray *)favoriteBookArray {
-    if (_favoriteBookArray == nil) {
-        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/favoriteBook.plist"];
-        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSDictionary *dic in dicArray) {
-            [array addObject:dic];
-        }
-        _favoriteBookArray = array;
-    }
-    
-    NSLog(@"2.facorite:%ld", _favoriteBookArray.count);
-    return _favoriteBookArray;
-}
-
-- (NSMutableArray *)readingBookArray {
-    if (_readingBookArray == nil) {
-        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/readingBook.plist"];
-        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSDictionary *dic in dicArray) {
-            [array addObject:dic];
-        }
-        _readingBookArray = array;
-    }
-    return _readingBookArray;
-}
-
-- (NSMutableArray *)haveReadBookArray {
-    if (_haveReadBookArray == nil) {
-        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/haveReadBook.plist"];
-        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSDictionary *dic in dicArray) {
-            [array addObject:dic];
-        }
-        _haveReadBookArray = array;
-    }
-    return _haveReadBookArray;
-}
-
-
+/**
+ 重写init方法
+ */
 - (instancetype)init {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     if (self = [super initWithCollectionViewLayout:layout]) {
@@ -83,6 +44,9 @@ static NSString *const reusecollectionCell = @"collectionCell";
     return self;
 }
 
+/**
+ 判断第几组tableViewCell
+ */
 - (NSMutableArray *)whichSectionForBooksArray {
     NSMutableArray *array = [NSMutableArray array];
     if (self.tableViewSection == 0) {
@@ -103,7 +67,6 @@ static NSString *const reusecollectionCell = @"collectionCell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return [self whichSectionForBooksArray].count;
-//    return self.favoriteBookArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -115,7 +78,6 @@ static NSString *const reusecollectionCell = @"collectionCell";
     NSDictionary *dic = [NSDictionary dictionary];
     NSMutableArray *array = [NSMutableArray array];
     array = [self whichSectionForBooksArray];
-//    array = self.favoriteBookArray;
     dic = array[indexPath.row];
     
     NSLog(@"title:%@", dic[@"title"]);
@@ -134,7 +96,6 @@ static NSString *const reusecollectionCell = @"collectionCell";
     NSDictionary *dic = [NSDictionary dictionary];
     NSMutableArray *array = [NSMutableArray array];
     array = [self whichSectionForBooksArray];
-//    array = self.favoriteBookArray;
     dic = array[indexPath.row];
     if ([self.delegate respondsToSelector:@selector(booksConllectionViewController:didSelectAtItemIndexPath:withData:)]) {
         [self.delegate booksConllectionViewController:self didSelectAtItemIndexPath:indexPath withData:dic];

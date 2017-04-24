@@ -17,9 +17,8 @@
 
 @implementation BooksCollectionViewCell
 
-/**
- 重写get方法
- */
+# pragma mark - 重写get方法
+
 - (UIImageView *)bookImageView {
     if (! _bookImageView) {
         float imageX = 10;
@@ -49,9 +48,8 @@
     return _bookNameLabel;
 }
 
-/**
- 重写set方法
- */
+# pragma mark - 重写set方法
+
 - (void)setBookImage:(UIImage *)bookImage {
     _bookImage = bookImage;
     self.bookImageView.image = bookImage;

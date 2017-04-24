@@ -15,15 +15,19 @@
 #import "BooksCollectionViewController.h"
 #import "BooksCollectionViewCell.h"
 #import "DetailViewController.h"
+#import "PopupDetailView.h"
 
 @interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate, BooksCollectionViewControllerDelegate, UICollectionViewDelegate>
 
-@property (nonatomic, strong) BooksCollectionViewController *booksCollectionViewController;
+@property (nonatomic, strong) BooksCollectionViewController *favoriteCollectionViewController;
+@property (nonatomic, strong) BooksCollectionViewController *readingCollectionViewController;
+@property (nonatomic, strong) BooksCollectionViewController *haveReadCollectionViewController;
 @property (nonatomic, strong) NSMutableArray *favoriteBookArray; // 存放喜爱的书本信息
 @property (nonatomic, strong) NSMutableArray *readingBookArray; // 存放正在读的书本信息
 @property (nonatomic, strong) NSMutableArray *haveReadBookArray; // 存放已读书本信息
 @property (nonatomic, strong) JSONAnalysis *jsonAnalysis;
 @property (nonatomic, strong) TableViewCell *tableViewCell;
+@property (nonatomic, strong) PopupDetailView *popupView;
 
 @end
 
@@ -33,12 +37,8 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.booksCollectionViewController = [[BooksCollectionViewController alloc] init];
-    
-    NSLog(@"viewDidLoad%@", self.booksCollectionViewController);
 
-    [self subviewsFrame];
+    [self setNavigationBarStyle];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,54 +46,17 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     // Dispose of any resources that can be recreated.
 }
 
-- (NSMutableArray *)favoriteBookArray {
-    if (_favoriteBookArray == nil) {
-        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/favoriteBook.plist"];
-        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSDictionary *dic in dicArray) {
-            [array addObject:dic];
-        }
-        _favoriteBookArray = array;
-    }
-    NSLog(@"1.facorite:%ld", _favoriteBookArray.count);
-    return _favoriteBookArray;
-}
-
-- (NSMutableArray *)readingBookArray {
-    if (_readingBookArray == nil) {
-        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/readingBook.plist"];
-        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSDictionary *dic in dicArray) {
-            [array addObject:dic];
-        }
-        _readingBookArray = array;
-    }
-    return _readingBookArray;
-}
-
-- (NSMutableArray *)haveReadBookArray {
-    if (_haveReadBookArray == nil) {
-        NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/haveReadBook.plist"];
-        NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSDictionary *dic in dicArray) {
-            [array addObject:dic];
-        }
-        _haveReadBookArray = array;
-    }
-    return _haveReadBookArray;
-}
-
+/**
+ 定义tableView样式
+ */
 - (instancetype)initWithStyle:(UITableViewStyle)style {
     return [super initWithStyle:UITableViewStyleGrouped];
 }
 
 /**
- 设置子控件的frame
+ 设置子控件frame
  */
-- (void)subviewsFrame {
+- (void)setNavigationBarStyle {
     // 设置导航栏按钮及文字
     UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteBookInfo)];
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
@@ -141,6 +104,16 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
+ 扫描条形码
+ */
+- (void)captureIsbnByCamera {
+    CameraCaptureController *cameraCapture = [[CameraCaptureController alloc] init];
+    [self.navigationController pushViewController:cameraCapture animated:YES];
+    [cameraCapture cameraStartCapture];
+    cameraCapture.delegate = self;
+}
+
+/**
  查找书本信息
  */
 - (void)searchBookInfoWithIsbn:(NSString *)isbnString {
@@ -158,25 +131,6 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 刷新页面数据
- */
-- (void)updateViewData {
-    [self.booksCollectionViewController.collectionView reloadData];
-    NSLog(@"updateViewData%@", self.booksCollectionViewController);
-    [self.tableView reloadData];
-}
-
-/**
- 扫描条形码
- */
-- (void)captureIsbnByCamera {
-    CameraCaptureController *cameraCapture = [[CameraCaptureController alloc] init];
-    [self.navigationController pushViewController:cameraCapture animated:YES];
-    [cameraCapture cameraStartCapture];
-    cameraCapture.delegate = self;
-}
-
-/**
  保存到plist文件
  */
 - (void)saveArrayToPlist:(NSMutableArray *)array {
@@ -191,6 +145,14 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
+ 刷新页面数据
+ */
+- (void)updateViewData {
+    [self.favoriteCollectionViewController.collectionView reloadData];
+    [self.tableView reloadData];
+}
+
+/**
  显示错误文字提示框
  */
 - (void)errorHUDWithString:(NSString *)string {
@@ -202,6 +164,40 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
         [hud hideAnimated:YES afterDelay:2.f];
     });
+}
+
+# pragma mark - Lazyload Method
+
+- (NSMutableArray *)favoriteBookArray {
+    if (_favoriteBookArray == nil) {
+        _favoriteBookArray = [self loadingArray:_favoriteBookArray withPlistName:@"favoriteBook.plist"];
+    }
+    return _favoriteBookArray;
+}
+
+- (NSMutableArray *)readingBookArray {
+    if (_readingBookArray == nil) {
+        _readingBookArray = [self loadingArray:_readingBookArray withPlistName:@"readingBook.plist"];
+    }
+    return _readingBookArray;
+}
+
+- (NSMutableArray *)haveReadBookArray {
+    if (_haveReadBookArray == nil) {
+        _haveReadBookArray = [self loadingArray:_haveReadBookArray withPlistName:@"haveReadBook.plist"];
+    }
+    return _haveReadBookArray;
+}
+
+- (NSMutableArray *)loadingArray:(NSMutableArray *)loadArray withPlistName:(NSString *)plistName {
+    NSString *plistPath = [NSString stringWithFormat:@"Documents/%@", plistName];
+    NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:plistPath];
+    NSArray *dicArray = [NSArray arrayWithContentsOfFile:path];
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSDictionary *dic in dicArray) {
+        [array addObject:dic];
+    }
+    return array;
 }
 
 # pragma mark - BooksCollectionViewControllerDelegate
@@ -232,7 +228,31 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         return;
     }
     [self.favoriteBookArray addObject:dic];
+    [self showPopupDetailView];
+}
+
+- (void)showPopupDetailView {
+    self.popupView = [PopupDetailView popupViewWithParentView:self.view infoDic:nil];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelToAddBook)];
+    cancelButton.title = @"取消";
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(sureToAddBook)];
+    saveButton.title = @"添加";
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    self.navigationItem.rightBarButtonItem = saveButton;
+}
+
+- (void)cancelToAddBook {
+    NSLog(@"CANCEL");
+    [self.favoriteBookArray removeLastObject];
+    [self.popupView killCover];
+    [self setNavigationBarStyle];
+}
+
+- (void)sureToAddBook {
+    NSLog(@"SURE");
     [self saveArrayToPlist:self.favoriteBookArray];
+    [self.popupView killCover];
+    [self setNavigationBarStyle];
 }
 
 #pragma mark - TableViewDataSource
@@ -247,6 +267,16 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BooksCollectionViewController *collectionViewController = [[BooksCollectionViewController alloc] init];
+    if (indexPath.section == 0) {
+        self.favoriteCollectionViewController = collectionViewController;
+        collectionViewController.favoriteBookArray = self.favoriteBookArray;
+    } else if (indexPath.section == 1) {
+        self.readingCollectionViewController = collectionViewController;
+        collectionViewController.readingBookArray = self.readingBookArray;
+    } else if (indexPath.section == 2) {
+        self.haveReadCollectionViewController = collectionViewController;
+        collectionViewController.haveReadBookArray = self.haveReadBookArray;
+    }
     self.tableViewCell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reusetableViewCell collectionViewController:collectionViewController];
     collectionViewController.delegate = self;
     [self.tableViewCell setTableViewSection:indexPath.section];
