@@ -61,7 +61,6 @@
         self.coverView.alpha = 0.0;
         self.bookDetailView.alpha = 0.0;
     } completion:^(BOOL finished) {
-        
         [self.bookDetailView removeFromSuperview];
         self.bookDetailView = nil;
         [self.coverView removeFromSuperview];
@@ -81,15 +80,41 @@
     bookDetailView.frame = CGRectMake(detailX, detailY, detailW, detailH);
     bookDetailView.backgroundColor = [UIColor whiteColor];
     bookDetailView.alpha = 1.0;
+    bookDetailView.layer.cornerRadius = 5.0;
+    bookDetailView.layer.masksToBounds = YES;
     self.bookDetailView = bookDetailView;
-    [parentView addSubview:bookDetailView];
+    [parentView addSubview:self.bookDetailView];
     
-    UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 150, 200)];
+    float imageW = detailW * 0.5;
+    float imageH = imageW / 1.5 * 2;
+    float imageX = (detailW - imageW) * 0.5;
+    float imageY = 10;
+    UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     bookImageView.backgroundColor = [UIColor redColor];
     NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
     bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
     self.bookImageView = bookImageView;
     [self.bookDetailView addSubview:self.bookImageView];
+    
+    float titleX = 0;
+    float titleY = imageH + imageY * 2;
+    float titleW = detailW;
+    float titleH = 20;
+    UILabel *bookTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(titleX, titleY, titleW, titleH)];
+    bookTitleLabel.textAlignment = NSTextAlignmentCenter;
+    bookTitleLabel.text = self.bookInfoDic[@"title"];
+    self.bookTitleLabel = bookTitleLabel;
+    [self.bookDetailView addSubview: self.bookTitleLabel];
+    
+    float authorX = 0;
+    float authorY = titleY + titleH + imageY;
+    float authorW = detailW;
+    float authorH = 20;
+    UILabel *authorLabel = [[UILabel alloc]initWithFrame:CGRectMake(authorX, authorY, authorW, authorH)];
+    authorLabel.textAlignment = NSTextAlignmentCenter;
+    authorLabel.text = [self.bookInfoDic[@"author"] lastObject];
+    self.authorLabel = authorLabel;
+    [self.bookDetailView addSubview: self.authorLabel];
 }
 
 @end

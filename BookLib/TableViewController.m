@@ -200,6 +200,34 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     return array;
 }
 
+
+# pragma mark - show PopupView
+
+- (void)showPopupDetailViewWithBookInfo:(NSDictionary *)bookInfo {
+    self.popupView = [PopupDetailView popupViewWithParentView:self.view infoDic:bookInfo];
+    self.tableView.userInteractionEnabled = NO;
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelToAddBook)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(sureToAddBook)];
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    self.navigationItem.rightBarButtonItem = doneButton;
+}
+
+- (void)cancelToAddBook {
+    NSLog(@"CANCEL");
+    self.tableView.userInteractionEnabled = YES;
+    [self.favoriteBookArray removeLastObject];
+    [self.popupView killCover];
+    [self setNavigationBarStyle];
+}
+
+- (void)sureToAddBook {
+    NSLog(@"SURE");
+    self.tableView.userInteractionEnabled = YES;
+    [self saveArrayToPlist:self.favoriteBookArray];
+    [self.popupView killCover];
+    [self setNavigationBarStyle];
+}
+
 # pragma mark - BooksCollectionViewControllerDelegate
 
 - (void)booksConllectionViewController:(BooksCollectionViewController *)booksConllectionViewController didSelectAtItemIndexPath:(NSIndexPath *)indexPath withData:(NSDictionary *)dic {
@@ -228,31 +256,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         return;
     }
     [self.favoriteBookArray addObject:dic];
-    [self showPopupDetailView];
-}
-
-- (void)showPopupDetailView {
-    self.popupView = [PopupDetailView popupViewWithParentView:self.view infoDic:nil];
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelToAddBook)];
-    cancelButton.title = @"取消";
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(sureToAddBook)];
-    saveButton.title = @"添加";
-    self.navigationItem.leftBarButtonItem = cancelButton;
-    self.navigationItem.rightBarButtonItem = saveButton;
-}
-
-- (void)cancelToAddBook {
-    NSLog(@"CANCEL");
-    [self.favoriteBookArray removeLastObject];
-    [self.popupView killCover];
-    [self setNavigationBarStyle];
-}
-
-- (void)sureToAddBook {
-    NSLog(@"SURE");
-    [self saveArrayToPlist:self.favoriteBookArray];
-    [self.popupView killCover];
-    [self setNavigationBarStyle];
+    [self showPopupDetailViewWithBookInfo:dic];
 }
 
 #pragma mark - TableViewDataSource
