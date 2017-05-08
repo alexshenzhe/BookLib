@@ -13,8 +13,14 @@
 
 @property (nonatomic, strong) BooksCollectionViewController *collectionViewController;
 
+/**
+ 初始化tableViewCell
+ */
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier collectionViewController:(BooksCollectionViewController *)collectionViewController;
 
+/**
+ 传递分组信息
+ */
 - (void)setTableViewSection:(NSInteger)section;
 
 @end

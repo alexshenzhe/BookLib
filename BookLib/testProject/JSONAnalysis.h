@@ -20,6 +20,9 @@
 
 @property (nonatomic, weak) id<JSONAnalysisDelegate> delegate;
 
+/**
+ 创建
+ */
 - (instancetype)initAnalysisWithURL:(NSURL *)url;
 + (instancetype)analysisWithURL:(NSURL *)url;
 

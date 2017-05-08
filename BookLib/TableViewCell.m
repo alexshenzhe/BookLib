@@ -26,6 +26,9 @@
     // Configure the view for the selected state
 }
 
+/**
+ 初始化
+ */
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier collectionViewController:(BooksCollectionViewController *)collectionViewController {
     self.collectionViewController = collectionViewController;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -36,13 +39,19 @@
     return self;
 }
 
+/**
+ 设置子控件frame
+ */
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.collectionViewController.collectionView.frame = self.contentView.frame;
 }
 
+/**
+ 传递分组信息
+ */
 - (void)setTableViewSection:(NSInteger)section {
-    self.collectionViewController.tableViewSection = section;
+    self.collectionViewController.tableViewCellSection = section;
 }
 
 @end

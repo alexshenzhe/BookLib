@@ -106,15 +106,34 @@
     self.bookTitleLabel = bookTitleLabel;
     [self.bookDetailView addSubview: self.bookTitleLabel];
     
-    float authorX = 0;
-    float authorY = titleY + titleH + imageY;
+    float authorX = titleX;
+    float authorY = titleY + titleH;
     float authorW = detailW;
-    float authorH = 20;
+    float authorH = titleH;
     UILabel *authorLabel = [[UILabel alloc]initWithFrame:CGRectMake(authorX, authorY, authorW, authorH)];
     authorLabel.textAlignment = NSTextAlignmentCenter;
-    authorLabel.text = [self.bookInfoDic[@"author"] lastObject];
+    NSArray *authorArray = [NSArray array];
+    authorArray = self.bookInfoDic[@"author"];
+    NSMutableString *authors = [[NSMutableString alloc] init];
+    if (authorArray.count > 1) {
+        for (NSString *author in authorArray) {
+            [authors appendFormat:@"%@ %@", authors, author];
+        }
+    } else {
+        authors = [authorArray lastObject];
+    }
+    authorLabel.text = authors;
     self.authorLabel = authorLabel;
     [self.bookDetailView addSubview: self.authorLabel];
+    
+    float publisherX = authorX;
+    float publisherY = authorY + authorH;
+    float publisherW = authorW;
+    float publisherH = authorH;
+    UILabel *publisherLabel = [[UILabel alloc] initWithFrame:CGRectMake(publisherX, publisherY, publisherW, publisherH)];
+    publisherLabel.text = self.bookInfoDic[@"publisher"];
+    self.publisherLabel = publisherLabel;
+    [self.bookDetailView addSubview:self.publisherLabel];
 }
 
 @end

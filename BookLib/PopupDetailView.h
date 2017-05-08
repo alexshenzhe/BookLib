@@ -10,8 +10,16 @@
 
 @interface PopupDetailView : UIView
 
+/**
+ 创建popupView
+ */
 - (instancetype)initWithParentView:(UIView *)parentView infoDic:(NSDictionary *)infoDic;
 + (instancetype)popupViewWithParentView:(UIView *)parentView infoDic:(NSDictionary *)infoDic;
+
+
+/**
+ 清除阴影及popupView
+ */
 - (void)killCover;
 
 @end

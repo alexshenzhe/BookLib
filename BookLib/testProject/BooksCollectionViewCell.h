@@ -10,7 +10,7 @@
 
 @interface BooksCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) UIImage *bookImage;
-@property (nonatomic, copy) NSString *bookName;
+@property (nonatomic, strong) UIImage *bookImage; // 封面图片
+@property (nonatomic, copy) NSString *bookName; // 书本名称
 
 @end

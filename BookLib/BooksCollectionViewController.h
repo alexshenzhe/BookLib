@@ -12,7 +12,7 @@
 @protocol BooksCollectionViewControllerDelegate <NSObject>
 
 @optional
-- (void)booksConllectionViewController:(BooksCollectionViewController *)booksConllectionViewController didSelectAtItemIndexPath:(NSIndexPath *)indexPath withData:(NSDictionary *)dic;
+- (void)booksConllectionViewController:(BooksCollectionViewController *)booksConllectionViewController didSelectAtItemIndexPath:(NSIndexPath *)indexPath withTableViewSection:(NSInteger)section withData:(NSDictionary *)dic;
 
 @end
 
@@ -21,7 +21,8 @@
 @property (nonatomic, strong) NSMutableArray *favoriteBookArray; // 存放喜爱的书本信息
 @property (nonatomic, strong) NSMutableArray *readingBookArray; // 存放正在读的书本信息
 @property (nonatomic, strong) NSMutableArray *haveReadBookArray; // 存放已读书本信息
-@property (nonatomic, assign) NSInteger tableViewSection;
+@property (nonatomic, assign) NSInteger tableViewCellSection; // 分组信息
+
 @property (nonatomic, weak) id <BooksCollectionViewControllerDelegate> delegate;
 
 @end

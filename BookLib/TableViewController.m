@@ -17,14 +17,16 @@
 #import "DetailViewController.h"
 #import "PopupDetailView.h"
 
-@interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate, BooksCollectionViewControllerDelegate, UICollectionViewDelegate>
+@interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate, BooksCollectionViewControllerDelegate, DetailViewControllerDelegate, UICollectionViewDelegate>
 
 @property (nonatomic, strong) BooksCollectionViewController *favoriteCollectionViewController;
 @property (nonatomic, strong) BooksCollectionViewController *readingCollectionViewController;
 @property (nonatomic, strong) BooksCollectionViewController *haveReadCollectionViewController;
+@property (nonatomic, strong) DetailViewController *detailViewController; // 详细信息页
 @property (nonatomic, strong) NSMutableArray *favoriteBookArray; // 存放喜爱的书本信息
 @property (nonatomic, strong) NSMutableArray *readingBookArray; // 存放正在读的书本信息
 @property (nonatomic, strong) NSMutableArray *haveReadBookArray; // 存放已读书本信息
+@property (nonatomic, strong) NSDictionary *currentDic; // 存储当前新增书本信息
 @property (nonatomic, strong) JSONAnalysis *jsonAnalysis;
 @property (nonatomic, strong) TableViewCell *tableViewCell;
 @property (nonatomic, strong) PopupDetailView *popupView;
@@ -58,9 +60,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
  */
 - (void)setNavigationBarStyle {
     // 设置导航栏按钮及文字
-    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteBookInfo)];
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
-    self.navigationItem.leftBarButtonItem = deleteButton;
     self.navigationItem.rightBarButtonItem = addButton;
     self.title = @"BOOKLib";
 }
@@ -70,16 +70,22 @@ static NSString *const reusetableViewCell = @"tableViewCell";
  */
 - (void)addBookInfo {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    // 输入
+    // 手动输入
     UIAlertAction *inputAction = [UIAlertAction actionWithTitle:@"输入" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIAlertController *inputAlertController = [UIAlertController alertControllerWithTitle:@"输入" message:@"请正确输入书本背后条形码数字" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *inputAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *inputAction = [UIAlertAction actionWithTitle:@"搜索" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             UITextField *textField = inputAlertController.textFields.firstObject;
+            // loading动画
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
             hud.backgroundView.style = MBProgressHUDBackgroundStyleSolidColor;
             hud.backgroundView.color = [UIColor colorWithWhite:0.f alpha:0.1f];
-            [self searchBookInfoWithIsbn:textField.text];
-            [hud hideAnimated:YES];
+            
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+                [self searchBookInfoWithIsbn:textField.text];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [hud hideAnimated:YES];
+                });
+            });
         }];
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
         
@@ -123,18 +129,11 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 删除书本信息
- */
-- (void)deleteBookInfo {
-    [self.favoriteBookArray removeLastObject];
-    [self saveArrayToPlist:self.favoriteBookArray];
-}
-
-/**
  保存到plist文件
  */
-- (void)saveArrayToPlist:(NSMutableArray *)array {
-    NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/favoriteBook.plist"];
+- (void)saveArrayToPlist:(NSMutableArray *)array withBookGroup:(NSString *)bookGroup {
+    NSString *fileName = [NSString stringWithFormat:@"Documents/%@.plist", bookGroup];
+    NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:fileName];
     NSLog(@"%@", path);
     BOOL success = [array writeToFile:path atomically:YES];
     if (! success) {
@@ -206,6 +205,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 - (void)showPopupDetailViewWithBookInfo:(NSDictionary *)bookInfo {
     self.popupView = [PopupDetailView popupViewWithParentView:self.view infoDic:bookInfo];
     self.tableView.userInteractionEnabled = NO;
+    // 修改导航栏功能
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelToAddBook)];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(sureToAddBook)];
     self.navigationItem.leftBarButtonItem = cancelButton;
@@ -215,7 +215,6 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 - (void)cancelToAddBook {
     NSLog(@"CANCEL");
     self.tableView.userInteractionEnabled = YES;
-    [self.favoriteBookArray removeLastObject];
     [self.popupView killCover];
     [self setNavigationBarStyle];
 }
@@ -223,24 +222,63 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 - (void)sureToAddBook {
     NSLog(@"SURE");
     self.tableView.userInteractionEnabled = YES;
-    [self saveArrayToPlist:self.favoriteBookArray];
+    // 保存当前书本信息
+    [self.favoriteBookArray addObject:self.currentDic];
+    [self saveArrayToPlist:self.favoriteBookArray withBookGroup:@"favoriteBook"];
     [self.popupView killCover];
     [self setNavigationBarStyle];
 }
 
+# pragma mark - DetailViewControllerDelegate
+
+-(void)DetailViewControllerDelegate:(DetailViewController *)detailViewController withIndexPath:(NSIndexPath *)indexPath andTableViewCellSection:(NSInteger)section fromBookGroup:(NSString *)bookGroupFrom toBookGroup:(NSString *)bookGroupTo {
+    NSMutableArray *arrayFrom = [NSMutableArray array];
+    NSMutableArray *arrayTo = [NSMutableArray array];
+    //  判断当前所属组
+    if (section == 0) {
+        arrayFrom = self.favoriteBookArray;
+    } else if (section == 1) {
+        arrayFrom = self.readingBookArray;
+    } else if (section == 2) {
+        arrayFrom = self.haveReadBookArray;
+    }
+    // 在当前组删除书本信息
+    [arrayFrom removeObjectAtIndex:indexPath.row];
+    [self saveArrayToPlist:arrayFrom withBookGroup:bookGroupFrom];
+    //  如果是删除操作
+    if ([bookGroupTo isEqualToString:@"delete"]) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
+    // 判断选择保存的组
+    if ([bookGroupTo isEqualToString:@"favoriteBook"]) {
+        arrayTo = self.favoriteBookArray;
+    } else if ([bookGroupTo isEqualToString:@"readingBook"]) {
+        arrayTo = self.readingBookArray;
+    } else if ([bookGroupTo isEqualToString:@"haveReadBook"]) {
+        arrayTo = self.haveReadBookArray;
+    }
+    [arrayTo addObject:detailViewController.bookInfoDic];
+    [self saveArrayToPlist:arrayTo withBookGroup:bookGroupTo];
+    // 退出详细页
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 # pragma mark - BooksCollectionViewControllerDelegate
 
-- (void)booksConllectionViewController:(BooksCollectionViewController *)booksConllectionViewController didSelectAtItemIndexPath:(NSIndexPath *)indexPath withData:(NSDictionary *)dic {
+- (void)booksConllectionViewController:(BooksCollectionViewController *)booksConllectionViewController didSelectAtItemIndexPath:(NSIndexPath *)indexPath withTableViewSection:(NSInteger)section withData:(NSDictionary *)dic {
     NSLog(@"我选择了NO.%ld，title:%@", indexPath.row, dic[@"title"]);
-    DetailViewController *detailViewController = [[DetailViewController alloc] init];
-    detailViewController.bookDic = dic;
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    self.detailViewController = [[DetailViewController alloc] init];
+    self.detailViewController.delegate = self;
+    self.detailViewController.tableViewCellSection = section;
+    self.detailViewController.indexPath = indexPath;
+    self.detailViewController.bookInfoDic = dic;
+    [self.navigationController pushViewController:self.detailViewController animated:YES];
 }
 
 # pragma mark - CameraReadControllerDelegate
 
 - (void)cameraCaptureSuccess:(CameraCaptureController *)cameraCaptureController values:(NSString *)value {
-    NSLog(@"isbn-----%@", value);
     [self searchBookInfoWithIsbn:value];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -255,7 +293,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         [self errorHUDWithString:errorString];
         return;
     }
-    [self.favoriteBookArray addObject:dic];
+    self.currentDic = dic;
     [self showPopupDetailViewWithBookInfo:dic];
 }
 
@@ -271,6 +309,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BooksCollectionViewController *collectionViewController = [[BooksCollectionViewController alloc] init];
+    // 为不同组添加内容
     if (indexPath.section == 0) {
         self.favoriteCollectionViewController = collectionViewController;
         collectionViewController.favoriteBookArray = self.favoriteBookArray;
@@ -283,6 +322,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     }
     self.tableViewCell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reusetableViewCell collectionViewController:collectionViewController];
     collectionViewController.delegate = self;
+    // 传递分组信息
     [self.tableViewCell setTableViewSection:indexPath.section];
     return self.tableViewCell;
 }

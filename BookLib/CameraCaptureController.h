@@ -20,6 +20,10 @@
 @interface CameraCaptureController : UIViewController
 
 @property (nonatomic, weak) id<CameraCaptureControllerDelegate> delegate;
+
+/**
+ 开始获取条形码
+ */
 - (void)cameraStartCapture;
 
 @end

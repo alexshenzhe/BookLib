@@ -31,7 +31,7 @@ static NSString *const reusecollectionCell = @"collectionCell";
 }
 
 /**
- 重写init方法
+ 重写init方法，设置layout
  */
 - (instancetype)init {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -49,11 +49,11 @@ static NSString *const reusecollectionCell = @"collectionCell";
  */
 - (NSMutableArray *)whichSectionForBooksArray {
     NSMutableArray *array = [NSMutableArray array];
-    if (self.tableViewSection == 0) {
+    if (self.tableViewCellSection == 0) {
         array = self.favoriteBookArray;
-    } else if (self.tableViewSection == 1) {
+    } else if (self.tableViewCellSection == 1) {
         array = self.readingBookArray;
-    } else if (self.tableViewSection == 2) {
+    } else if (self.tableViewCellSection == 2) {
         array = self.haveReadBookArray;
     }
     return array;
@@ -97,11 +97,9 @@ static NSString *const reusecollectionCell = @"collectionCell";
     NSMutableArray *array = [NSMutableArray array];
     array = [self whichSectionForBooksArray];
     dic = array[indexPath.row];
-    if ([self.delegate respondsToSelector:@selector(booksConllectionViewController:didSelectAtItemIndexPath:withData:)]) {
-        [self.delegate booksConllectionViewController:self didSelectAtItemIndexPath:indexPath withData:dic];
+    if ([self.delegate respondsToSelector:@selector(booksConllectionViewController:didSelectAtItemIndexPath:withTableViewSection:withData:)]) {
+        [self.delegate booksConllectionViewController:self didSelectAtItemIndexPath:indexPath withTableViewSection:self.tableViewCellSection withData:dic];
     }
-//    NSLog(@"我选择了NO.%ld，title:%@", indexPath.row, dic[@"title"]);
-//    NSLog(@"1.collectionView=%@", collectionView);
     return YES;
 }
 
