@@ -62,6 +62,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     // 设置导航栏按钮及文字
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
     self.navigationItem.rightBarButtonItem = addButton;
+    self.navigationItem.leftBarButtonItem = nil;
     self.title = @"BOOKLib";
 }
 
