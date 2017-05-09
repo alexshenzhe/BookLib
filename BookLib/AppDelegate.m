@@ -22,7 +22,6 @@
     self.window.backgroundColor = [UIColor redColor];
     
     TableViewController *booksViewController = [[TableViewController alloc] init];
-//    ViewController *booksViewController = [[ViewController alloc] init];
     BooksNavController *booksNavController = [[BooksNavController alloc] initWithRootViewController:booksViewController];
     self.window.rootViewController = booksNavController;
     [self.window makeKeyAndVisible];

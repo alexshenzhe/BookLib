@@ -114,7 +114,7 @@
     [self.view addSubview:bookImageView];
     
     // 作者
-    float authorX = imageX * 2 + imageW;
+    float authorX = imageW + imageX * 2;
     float authorY = imageY;
     float authorW = self.view.bounds.size.width - imageW - imageX * 3;
     float authorH = 40;
@@ -134,7 +134,7 @@
     
     // 出版社
     float publisherX = authorX;
-    float publisherY = authorY + authorH;
+    float publisherY = authorH + authorY;
     float publisherW = authorW;
     float publisherH = authorH;
     UILabel *publisherLabel = [[UILabel alloc] initWithFrame:CGRectMake(publisherX, publisherY, publisherW, publisherH)];
@@ -143,20 +143,30 @@
     
     // 价格
     float priceX = authorX;
-    float priceY = publisherY + publisherH;
+    float priceY = publisherH + publisherY;
     float priceW = authorW;
     float priceH = authorH;
     UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(priceX, priceY, priceW, priceH)];
     priceLabel.text = self.bookInfoDic[@"price"];
     [self.view addSubview:priceLabel];
     
+    // 出版时间
+    float pubdateX = authorX;
+    float pubdateY = priceH + priceY;
+    float pubdateW = authorW;
+    float pubdateH = authorH;
+    UILabel *pubdateLabel = [[UILabel alloc] initWithFrame:CGRectMake(pubdateX, pubdateY, pubdateW, pubdateH)];
+    pubdateLabel.text = self.bookInfoDic[@"pubdate"];
+    [self.view addSubview:pubdateLabel];
+    
     // 概要
     float summaryX = imageX;
     float summaryY = imageY + imageH;
     float summaryW = self.view.bounds.size.width - imageX * 2;
-    float summaryH = 100;
+    float summaryH = self.view.bounds.size.height * 1/3;
     UITextView *summaryTextView = [[UITextView alloc] initWithFrame:CGRectMake(summaryX, summaryY, summaryW, summaryH)];
     summaryTextView.editable = NO;
+    summaryTextView.font = [UIFont systemFontOfSize:15.0];
     summaryTextView.text = self.bookInfoDic[@"summary"];
     [self.view addSubview:summaryTextView];
 }
