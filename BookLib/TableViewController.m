@@ -63,7 +63,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
     self.navigationItem.rightBarButtonItem = addButton;
     self.navigationItem.leftBarButtonItem = nil;
-    self.title = @"BOOKLib";
+    self.title = @"首页";
 }
 
 /**
@@ -205,7 +205,8 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 
 - (void)showPopupDetailViewWithBookInfo:(NSDictionary *)bookInfo {
     self.popupView = [PopupDetailView popupViewWithParentView:self.view infoDic:bookInfo];
-    self.tableView.userInteractionEnabled = NO;
+    // 禁止页面滚动
+    self.tableView.scrollEnabled = NO;
     // 修改导航栏功能
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelToAddBook)];
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(sureToAddBook)];
@@ -215,15 +216,16 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 
 - (void)cancelToAddBook {
     NSLog(@"CANCEL");
-    self.tableView.userInteractionEnabled = YES;
+    // 恢复页面滚动
+    self.tableView.scrollEnabled = YES;
     [self.popupView killCover];
     [self setNavigationBarStyle];
 }
 
 - (void)sureToAddBook {
     NSLog(@"SURE");
-    self.tableView.userInteractionEnabled = YES;
-    // 保存当前书本信息
+    self.tableView.scrollEnabled = YES;
+    // 保存当前书本信息到待读
     [self.favoriteBookArray addObject:self.currentDic];
     [self saveArrayToPlist:self.favoriteBookArray withBookGroup:@"favoriteBook"];
     [self.popupView killCover];
@@ -246,7 +248,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     // 在当前组删除书本信息
     [arrayFrom removeObjectAtIndex:indexPath.row];
     [self saveArrayToPlist:arrayFrom withBookGroup:bookGroupFrom];
-    //  如果是删除操作
+    //  如果是删除操作则退出页面
     if ([bookGroupTo isEqualToString:@"delete"]) {
         [self.navigationController popViewControllerAnimated:YES];
         return;
@@ -271,8 +273,11 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     NSLog(@"我选择了NO.%ld，title:%@", indexPath.row, dic[@"title"]);
     self.detailViewController = [[DetailViewController alloc] init];
     self.detailViewController.delegate = self;
+    // 传递组信息
     self.detailViewController.tableViewCellSection = section;
+    // 传递书本索引
     self.detailViewController.indexPath = indexPath;
+    // 传递书本信息
     self.detailViewController.bookInfoDic = dic;
     [self.navigationController pushViewController:self.detailViewController animated:YES];
 }

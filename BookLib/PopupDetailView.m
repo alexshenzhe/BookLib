@@ -28,8 +28,7 @@
     if (self) {
         self.bookInfoDic = infoDic;
         [self createCoverWithParentView:parentView alpha:0.5];
-        [self createDetailViewWithParentView:parentView];
-        
+        [self createPopupViewWithParentView:parentView];
     }
     return self;
 }
@@ -69,11 +68,11 @@
 }
 
 /**
- 创建详细信息页
+ 创建Popup View信息页
  */
-- (void)createDetailViewWithParentView:(UIView *)parentView {
+- (void)createPopupViewWithParentView:(UIView *)parentView {
     UIView *popupView = [[UIView alloc] init];
-    // popup view
+    // Popup View
     float detailX = 40;
     float detailY = detailX;
     float detailW = parentView.frame.size.width - detailX * 2;
@@ -81,6 +80,7 @@
     popupView.frame = CGRectMake(detailX, detailY, detailW, detailH);
     popupView.backgroundColor = [UIColor whiteColor];
     popupView.alpha = 1.0;
+    // 圆角
     popupView.layer.cornerRadius = 5.0;
     popupView.layer.masksToBounds = YES;
     self.popupView = popupView;
@@ -112,7 +112,7 @@
     
     // 作者
     float authorX = titleX;
-    float authorY = titleH + titleY + imageY;
+    float authorY = titleH + titleY;
     float authorW = detailW;
     float authorH = titleH;
     UILabel *authorLabel = [[UILabel alloc]initWithFrame:CGRectMake(authorX, authorY, authorW, authorH)];
