@@ -102,11 +102,16 @@
  设置子控件的frame
  */
 - (void)subviewsFrame {
+    float textSize = 15.0;
+    float raingSize = 30.0;
+    float introSize = 15.0;
+    float titleSize = 18.0;
+
     // 封面
     float imageX = 20;
     float imageY = 84;
-    float imageW = 200;
-    float imageH = 250;
+    float imageW = (self.view.bounds.size.width - 2 * imageX) * 0.5 - imageX;
+    float imageH = imageW * 1.4;
     UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     bookImageView.backgroundColor = [UIColor purpleColor];
     NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
@@ -117,8 +122,9 @@
     float authorX = imageW + imageX * 2;
     float authorY = imageY;
     float authorW = self.view.bounds.size.width - imageW - imageX * 3;
-    float authorH = 40;
+    float authorH = imageH / 7;
     UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(authorX, authorY, authorW, authorH)];
+    authorLabel.font = [UIFont systemFontOfSize:textSize];
     NSArray *authorArray = [NSArray array];
     authorArray = self.bookInfoDic[@"author"];
     NSMutableString *authors = [[NSMutableString alloc] init];
@@ -129,7 +135,7 @@
     } else {
         authors = [authorArray lastObject];
     }
-    authorLabel.text = authors;
+    authorLabel.text = [NSString stringWithFormat:@"作者：%@", authors];
     [self.view addSubview:authorLabel];
     
     // 出版社
@@ -138,7 +144,8 @@
     float publisherW = authorW;
     float publisherH = authorH;
     UILabel *publisherLabel = [[UILabel alloc] initWithFrame:CGRectMake(publisherX, publisherY, publisherW, publisherH)];
-    publisherLabel.text = self.bookInfoDic[@"publisher"];
+    publisherLabel.font = [UIFont systemFontOfSize:textSize];
+    publisherLabel.text = [NSString stringWithFormat:@"出版社：%@", self.bookInfoDic[@"publisher"]];
     [self.view addSubview:publisherLabel];
     
     // 价格
@@ -147,7 +154,8 @@
     float priceW = authorW;
     float priceH = authorH;
     UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(priceX, priceY, priceW, priceH)];
-    priceLabel.text = self.bookInfoDic[@"price"];
+    priceLabel.font = [UIFont systemFontOfSize:textSize];
+    priceLabel.text = [NSString stringWithFormat:@"定价：%@", self.bookInfoDic[@"price"]];
     [self.view addSubview:priceLabel];
     
     // 出版时间
@@ -156,19 +164,44 @@
     float pubdateW = authorW;
     float pubdateH = authorH;
     UILabel *pubdateLabel = [[UILabel alloc] initWithFrame:CGRectMake(pubdateX, pubdateY, pubdateW, pubdateH)];
-    pubdateLabel.text = self.bookInfoDic[@"pubdate"];
+    pubdateLabel.font = [UIFont systemFontOfSize:textSize];
+    pubdateLabel.text = [NSString stringWithFormat:@"出版年：%@", self.bookInfoDic[@"pubdate"]];
     [self.view addSubview:pubdateLabel];
     
-    // 概要
-    float summaryX = imageX;
-    float summaryY = imageY + imageH;
-    float summaryW = self.view.bounds.size.width - imageX * 2;
-    float summaryH = self.view.bounds.size.height * 1/3;
-    UITextView *summaryTextView = [[UITextView alloc] initWithFrame:CGRectMake(summaryX, summaryY, summaryW, summaryH)];
-    summaryTextView.editable = NO;
-    summaryTextView.font = [UIFont systemFontOfSize:15.0];
-    summaryTextView.text = self.bookInfoDic[@"summary"];
-    [self.view addSubview:summaryTextView];
+    // 评分
+    float ratingX = authorX;
+    float ratingY = pubdateH + pubdateY;
+    float ratingW = authorW;
+    float ratingH = authorH;
+    UILabel *ratingLabelTitle = [[UILabel alloc] initWithFrame:CGRectMake(ratingX, ratingY, ratingW, ratingH)];
+    UILabel *ratingLabel = [[UILabel alloc] initWithFrame:CGRectMake(ratingX, ratingY + ratingH, ratingW, ratingH)];
+    ratingLabelTitle.font = [UIFont systemFontOfSize:textSize];
+    ratingLabel.font = [UIFont systemFontOfSize:raingSize];
+    ratingLabelTitle.text = @"豆瓣评分：";
+    ratingLabel.text = self.bookInfoDic[@"rating"][@"average"];
+    [self.view addSubview:ratingLabelTitle];
+    [self.view addSubview:ratingLabel];
+    
+    // 作者简介／概要
+    float authorIntroX = imageX;
+    float authorIntroY = imageY + imageH;
+    float authorIntroW = self.view.bounds.size.width - imageX * 2;
+    float authorIntroH = self.view.bounds.size.height - authorIntroY;
+    UILabel *authorIntroTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(authorIntroX, authorIntroY, authorIntroW, ratingH)];
+    authorIntroTitleLabel.textColor = [UIColor brownColor];
+    authorIntroTitleLabel.font = [UIFont systemFontOfSize:titleSize];
+    authorIntroTitleLabel.text = @"作者简介";
+    UITextView *authorIntroTextView = [[UITextView alloc] initWithFrame:CGRectMake(authorIntroX, authorIntroY + ratingH, authorIntroW, authorIntroH)];
+    authorIntroTextView.editable = NO;
+    authorIntroTextView.font = [UIFont systemFontOfSize:introSize];
+    NSString *authorIntro = [NSString stringWithFormat:@"%@", self.bookInfoDic[@"author_intro"]];
+    if (authorIntro.length == 0) {
+        authorIntroTitleLabel.text = @"内容简介";
+        authorIntro = self.bookInfoDic[@"summary"];
+    }
+    authorIntroTextView.text = authorIntro;
+    [self.view addSubview:authorIntroTitleLabel];
+    [self.view addSubview:authorIntroTextView];
 }
 
 @end

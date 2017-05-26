@@ -21,8 +21,8 @@ static NSString *const reusecollectionCell = @"collectionCell";
     [super viewDidLoad];
     
     [self.collectionView registerClass:[BooksCollectionViewCell class] forCellWithReuseIdentifier:reusecollectionCell];
-    self.collectionView.frame = CGRectMake(0, 0, self.collectionView.superview.frame.size.width, 314);
-    self.collectionView.backgroundColor = [UIColor grayColor];
+    // collectionView 背景颜色
+    self.collectionView.backgroundColor = [UIColor lightGrayColor];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -36,7 +36,7 @@ static NSString *const reusecollectionCell = @"collectionCell";
 - (instancetype)init {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     if (self = [super initWithCollectionViewLayout:layout]) {
-        layout.itemSize = CGSizeMake(200, 250);
+        layout.itemSize = CGSizeMake(200, 200 * 1.4);
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumInteritemSpacing = 10;
         layout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5);
