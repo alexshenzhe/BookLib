@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIView *coverView;
 @property (nonatomic, strong) UIView *popupView;
 @property (nonatomic, copy) NSDictionary *bookInfoDic;
+
 @end
 
 @implementation PopupDetailView
@@ -27,8 +28,9 @@
     self = [super init];
     if (self) {
         self.bookInfoDic = infoDic;
-        [self createCoverWithParentView:parentView alpha:0.5];
+        [self createCoverWithParentView:parentView alpha:0.7];
         [self createPopupViewWithParentView:parentView];
+        [self subviewsData];
     }
     return self;
 }
@@ -55,7 +57,7 @@
 /**
  清除阴影
  */
-- (void)killCover {
+- (void)killCoverAndPopupView {
     [UIView animateWithDuration:0.25 animations:^{
         self.coverView.alpha = 0.0;
         self.popupView.alpha = 0.0;
@@ -71,6 +73,8 @@
  创建Popup View信息页
  */
 - (void)createPopupViewWithParentView:(UIView *)parentView {
+    float textSize = 15.0;
+    
     UIView *popupView = [[UIView alloc] init];
     // Popup View
     float detailX = 40;
@@ -81,10 +85,10 @@
     popupView.backgroundColor = [UIColor whiteColor];
     popupView.alpha = 1.0;
     // 圆角
-    popupView.layer.cornerRadius = 5.0;
+    popupView.layer.cornerRadius = 10.0;
     popupView.layer.masksToBounds = YES;
+    [parentView addSubview:popupView];
     self.popupView = popupView;
-    [parentView addSubview:self.popupView];
     
     // 封面
     float imageW = detailW * 0.5;
@@ -93,10 +97,8 @@
     float imageY = 10;
     UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     bookImageView.backgroundColor = [UIColor redColor];
-    NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
-    bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+    [self.popupView addSubview:bookImageView];
     self.bookImageView = bookImageView;
-    [self.popupView addSubview:self.bookImageView];
     
     // 书名
     float titleX = 0;
@@ -105,10 +107,9 @@
     float titleH = 20;
     UILabel *bookTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(titleX, titleY, titleW, titleH)];
     bookTitleLabel.textAlignment = NSTextAlignmentCenter;
-    bookTitleLabel.font = [UIFont systemFontOfSize:15];
-    bookTitleLabel.text = self.bookInfoDic[@"title"];
+    bookTitleLabel.font = [UIFont systemFontOfSize:textSize];
+    [self.popupView addSubview:bookTitleLabel];
     self.bookTitleLabel = bookTitleLabel;
-    [self.popupView addSubview: self.bookTitleLabel];
     
     // 作者
     float authorX = titleX;
@@ -117,7 +118,44 @@
     float authorH = titleH;
     UILabel *authorLabel = [[UILabel alloc]initWithFrame:CGRectMake(authorX, authorY, authorW, authorH)];
     authorLabel.textAlignment = NSTextAlignmentCenter;
-    authorLabel.font = [UIFont systemFontOfSize:15];
+    authorLabel.font = [UIFont systemFontOfSize:textSize];
+    [self.popupView addSubview:authorLabel];
+    self.authorLabel = authorLabel;
+    
+    // 出版社
+    float publisherX = titleX;
+    float publisherY = authorH + authorY + imageY;
+    float publisherW = titleW;
+    float publisherH = titleH;
+    UILabel *publisherLabel = [[UILabel alloc] initWithFrame:CGRectMake(publisherX, publisherY, publisherW, publisherH)];
+    publisherLabel.textAlignment = NSTextAlignmentCenter;
+    publisherLabel.font = [UIFont systemFontOfSize:textSize];
+    [self.popupView addSubview:publisherLabel];
+    self.publisherLabel = publisherLabel;
+    
+    // 概要
+    float summaryX = titleX;
+    float summaryY = publisherH + publisherY + imageY;
+    float summaryW = titleW;
+    float summaryH = detailH - (publisherH + publisherY);
+    UITextView *summaryTextView = [[UITextView alloc] initWithFrame:CGRectMake(summaryX, summaryY, summaryW, summaryH)];
+    summaryTextView.editable = NO;
+    [self.popupView addSubview:summaryTextView];
+    self.summaryTextView = summaryTextView;
+}
+
+/**
+ 设置子控件数据
+ */
+- (void)subviewsData {
+    // 封面
+    NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
+    self.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+    
+    // 书名
+    self.bookTitleLabel.text = self.bookInfoDic[@"title"];
+    
+    // 作者
     NSArray *authorArray = [NSArray array];
     authorArray = self.bookInfoDic[@"author"];
     NSMutableString *authors = [[NSMutableString alloc] init];
@@ -128,32 +166,13 @@
     } else {
         authors = [authorArray lastObject];
     }
-    authorLabel.text = authors;
-    self.authorLabel = authorLabel;
-    [self.popupView addSubview: self.authorLabel];
+    self.authorLabel.text = authors;
     
     // 出版社
-    float publisherX = titleX;
-    float publisherY = authorH + authorY + imageY;
-    float publisherW = titleW;
-    float publisherH = titleH;
-    UILabel *publisherLabel = [[UILabel alloc] initWithFrame:CGRectMake(publisherX, publisherY, publisherW, publisherH)];
-    publisherLabel.textAlignment = NSTextAlignmentCenter;
-    publisherLabel.font = [UIFont systemFontOfSize:15];
-    publisherLabel.text = self.bookInfoDic[@"publisher"];
-    self.publisherLabel = publisherLabel;
-    [self.popupView addSubview:self.publisherLabel];
+    self.publisherLabel.text = self.bookInfoDic[@"publisher"];
     
-    // 概要
-    float summaryX = titleX;
-    float summaryY = publisherH + publisherY + imageY;
-    float summaryW = titleW;
-    float summaryH = detailH - (publisherH + publisherY);
-    UITextView *summaryTextView = [[UITextView alloc] initWithFrame:CGRectMake(summaryX, summaryY, summaryW, summaryH)];
-    summaryTextView.editable = NO;
-    summaryTextView.text = self.bookInfoDic[@"summary"];
-    self.summaryTextView = summaryTextView;
-    [self.popupView addSubview:self.summaryTextView];
+    // 简介
+    self.summaryTextView.text = self.bookInfoDic[@"summary"];
 }
 
 @end

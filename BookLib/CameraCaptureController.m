@@ -75,7 +75,8 @@
 - (void)cameraCaptureArea {
     // 阴影区域
     UIView *coverView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64)];
-    coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    coverView.backgroundColor = [UIColor blackColor];
+    coverView.alpha = 0.5;
     [self.view addSubview:coverView];
     
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, SCREENWIDTH, SCREENHEIGHT)];

@@ -20,6 +20,6 @@
 /**
  清除阴影及popupView
  */
-- (void)killCover;
+- (void)killCoverAndPopupView;
 
 @end

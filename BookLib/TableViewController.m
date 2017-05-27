@@ -153,7 +153,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 显示错误文字提示框
+ 显示错误文字弹出框
  */
 - (void)errorHUDWithString:(NSString *)string {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -218,7 +218,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     NSLog(@"CANCEL");
     // 恢复页面滚动
     self.tableView.scrollEnabled = YES;
-    [self.popupView killCover];
+    [self.popupView killCoverAndPopupView];
     [self setNavigationBarStyle];
 }
 
@@ -228,7 +228,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     // 保存当前书本信息到待读
     [self.favoriteBookArray addObject:self.currentDic];
     [self saveArrayToPlist:self.favoriteBookArray withBookGroup:@"favoriteBook"];
-    [self.popupView killCover];
+    [self.popupView killCoverAndPopupView];
     [self setNavigationBarStyle];
 }
 
