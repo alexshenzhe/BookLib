@@ -117,11 +117,12 @@
     float raingSize = 30.0;
     float introSize = 15.0;
     float titleSize = 18.0;
+    float screenWidth = self.view.bounds.size.width;
 
     // 封面
     float imageX = 20;
     float imageY = 84;
-    float imageW = (self.view.bounds.size.width - 2 * imageX) * 0.5 - imageX;
+    float imageW = (screenWidth - 2 * imageX) * 0.5 - imageX;
     float imageH = imageW * 1.4;
     UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     bookImageView.backgroundColor = [UIColor purpleColor];
@@ -131,7 +132,7 @@
     // 作者
     float authorX = imageW + imageX * 2;
     float authorY = imageY;
-    float authorW = self.view.bounds.size.width - imageW - imageX * 3;
+    float authorW = screenWidth - imageW - imageX * 3;
     float authorH = imageH / 7;
     UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(authorX, authorY, authorW, authorH)];
     authorLabel.font = [UIFont systemFontOfSize:textSize];
@@ -183,13 +184,15 @@
     self.ratingLabel = ratingLabel;
     
     // 作者简介/内容简介／目录标题按钮
-    float buttonX = imageX;
-    float buttonY = imageY + imageH + 5;
+    float numOfButton = 3;
+    float space = 5;
     float buttonW = 100;
     float buttonH = authorH;
+    float buttonX = (screenWidth - ((buttonW + space) * numOfButton - space)) * 0.5;
+    float buttonY = imageY + imageH + 5;
     UIButton *authorIntroButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX, buttonY, buttonW, buttonH)];
-    UIButton *summaryButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX + buttonW + 5, buttonY, buttonW, buttonH)];
-    UIButton *catalogButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX + buttonW * 2 + 10, buttonY, buttonW, buttonH)];
+    UIButton *summaryButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX + buttonW + space, buttonY, buttonW, buttonH)];
+    UIButton *catalogButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX + buttonW * 2 + space * 2, buttonY, buttonW, buttonH)];
     authorIntroButton.titleLabel.font = [UIFont systemFontOfSize:titleSize];
     summaryButton.titleLabel.font = [UIFont systemFontOfSize:titleSize];
     catalogButton.titleLabel.font = [UIFont systemFontOfSize:titleSize];

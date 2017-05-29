@@ -12,6 +12,8 @@
 		FA1C6A5D1E9E804900D0A5D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA1C6A5B1E9E804900D0A5D5 /* Main.storyboard */; };
 		FA1C6A5F1E9E804900D0A5D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA1C6A5E1E9E804900D0A5D5 /* Assets.xcassets */; };
 		FA1C6A621E9E804900D0A5D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA1C6A601E9E804900D0A5D5 /* LaunchScreen.storyboard */; };
+		FA1F11AA1EDC7463004880DB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1F11A91EDC7463004880DB /* SystemConfiguration.framework */; };
+		FA1F11AD1EDC751E004880DB /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1F11AC1EDC751E004880DB /* Reachability.m */; };
 		FA30982A1EA11088002B108E /* CameraCaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3098291EA11088002B108E /* CameraCaptureController.m */; };
 		FA3F20CD1E9E814A000937D6 /* BooksCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C01E9E814A000937D6 /* BooksCollectionViewCell.m */; };
 		FA3F20CE1E9E814A000937D6 /* DoubanData.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C21E9E814A000937D6 /* DoubanData.m */; };
@@ -34,6 +36,9 @@
 		FA1C6A5E1E9E804900D0A5D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA1C6A611E9E804900D0A5D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FA1C6A631E9E804900D0A5D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA1F11A91EDC7463004880DB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		FA1F11AB1EDC751E004880DB /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		FA1F11AC1EDC751E004880DB /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		FA3098261EA10F01002B108E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FA3098281EA11088002B108E /* CameraCaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraCaptureController.h; sourceTree = "<group>"; };
 		FA3098291EA11088002B108E /* CameraCaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraCaptureController.m; sourceTree = "<group>"; };
@@ -64,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA1F11AA1EDC7463004880DB /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +117,7 @@
 		FA3098251EA10F01002B108E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA1F11A91EDC7463004880DB /* SystemConfiguration.framework */,
 				FA3098261EA10F01002B108E /* AVFoundation.framework */,
 			);
 			name = Frameworks;
@@ -171,6 +178,8 @@
 		FA3F20DB1E9E824C000937D6 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				FA1F11AB1EDC751E004880DB /* Reachability.h */,
+				FA1F11AC1EDC751E004880DB /* Reachability.m */,
 				FA1C6A551E9E804900D0A5D5 /* AppDelegate.h */,
 				FA1C6A561E9E804900D0A5D5 /* AppDelegate.m */,
 				FA4DD6261E9FC0D600E6BF78 /* MBProgressHUD.h */,
@@ -261,6 +270,7 @@
 				FAB347D41EA4D38F0069D02A /* BooksCollectionViewController.m in Sources */,
 				FA1C6A571E9E804900D0A5D5 /* AppDelegate.m in Sources */,
 				FAE682E91EA8F3AC0085DC62 /* DetailViewController.m in Sources */,
+				FA1F11AD1EDC751E004880DB /* Reachability.m in Sources */,
 				FA30982A1EA11088002B108E /* CameraCaptureController.m in Sources */,
 				FA1C6A541E9E804900D0A5D5 /* main.m in Sources */,
 				FA4DD6281E9FC0D600E6BF78 /* MBProgressHUD.m in Sources */,

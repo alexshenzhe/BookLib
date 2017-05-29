@@ -16,6 +16,7 @@
 #import "BooksCollectionViewCell.h"
 #import "DetailViewController.h"
 #import "PopupDetailView.h"
+#import "Reachability.h"
 
 @interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate, BooksCollectionViewControllerDelegate, DetailViewControllerDelegate, UICollectionViewDelegate>
 
@@ -124,9 +125,36 @@ static NSString *const reusetableViewCell = @"tableViewCell";
  查找书本信息
  */
 - (void)searchBookInfoWithIsbn:(NSString *)isbnString {
+    if (![self checkNetworkStatus]) {
+        [self errorHUDWithString:@"网络不可用，请检查网络连接！"];
+        return;
+    }
     NSString *JSONString = [NSString stringWithFormat:@"https://api.douban.com/v2/book/isbn/:%@", isbnString];
     self.jsonAnalysis = [[JSONAnalysis alloc] initAnalysisWithURL:[NSURL URLWithString:JSONString]];
     self.jsonAnalysis.delegate = self;
+}
+
+/**
+ 检查当前网络是否正常
+ */
+- (BOOL)checkNetworkStatus {
+    BOOL isExistenceNetwork = YES;
+    Reachability *reach = [Reachability reachabilityWithHostName:@"www.apple.com"];
+    switch ([reach currentReachabilityStatus]) {
+        case NotReachable:
+            isExistenceNetwork = NO;
+            break;
+        case ReachableViaWiFi:
+            isExistenceNetwork = YES;
+            break;
+        case ReachableViaWWAN:
+            isExistenceNetwork = YES;
+            break;
+    }
+    if (!isExistenceNetwork) {
+        return NO;
+    }
+    return YES;
 }
 
 /**
