@@ -19,6 +19,7 @@
         // 全局队列异步操作
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         dispatch_async(queue, ^{
+            // 解析
             NSURLRequest *request = [NSURLRequest requestWithURL:url];
             NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:(id<NSURLSessionDataDelegate>)self delegateQueue:[NSOperationQueue mainQueue]];
             NSURLSessionDataTask *task = [session dataTaskWithRequest:request];
@@ -48,7 +49,6 @@
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
     NSError *error = nil;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-    NSLog(@"%@", dic);
     // 通知代理
     if ([self.delegate respondsToSelector:@selector(JSONAnalysisSuccess:dictionary:)]) {
         [self.delegate JSONAnalysisSuccess:self dictionary:dic];
@@ -60,7 +60,7 @@
  请求成功或者失败的处理
  */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
-
+    // 暂时不做处理
 }
 
 @end

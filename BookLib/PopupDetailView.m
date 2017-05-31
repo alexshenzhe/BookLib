@@ -8,26 +8,29 @@
 
 #import "PopupDetailView.h"
 
+#define PARENTVIEWWIDTH (parentView.bounds.size.width)
+#define PARENTVIEWHEIGHT (parentView.bounds.size.height)
+#define PARENTVIEWOFFSETX (parentView.contentOffset.x)
+#define PARENTVIEWOFFSETY (parentView.contentOffset.y)
 @interface PopupDetailView ()
 
-@property (nonatomic, strong) UIImageView *bookImageView; // 封面
-@property (nonatomic, strong) UILabel *bookTitleLabel; // 书名
-@property (nonatomic, strong) UILabel *authorLabel; // 作者
-@property (nonatomic, strong) UILabel *publisherLabel; // 出版社
-@property (nonatomic, strong) UITextView *summaryTextView; // 该要
-
-@property (nonatomic, strong) UIView *coverView;
-@property (nonatomic, strong) UIView *popupView;
+@property (nonatomic, weak) UIImageView *bookImageView; // 封面
+@property (nonatomic, weak) UILabel *bookTitleLabel; // 书名
+@property (nonatomic, weak) UILabel *authorLabel; // 作者
+@property (nonatomic, weak) UILabel *publisherLabel; // 出版社
+@property (nonatomic, weak) UITextView *summaryTextView; // 该要
+@property (nonatomic, strong) UIView *coverView; // 阴影
+@property (nonatomic, strong) UIView *popupView; // 弹窗
 @property (nonatomic, copy) NSDictionary *bookInfoDic;
 
 @end
 
 @implementation PopupDetailView
 
-- (instancetype)initWithParentView:(UIView *)parentView infoDic:(NSDictionary *)infoDic{
+- (instancetype)initWithParentView:(UITableView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic{
     self = [super init];
     if (self) {
-        self.bookInfoDic = infoDic;
+        self.bookInfoDic = bookInfoDic;
         [self createCoverWithParentView:parentView alpha:0.7];
         [self createPopupViewWithParentView:parentView];
         [self subviewsData];
@@ -35,20 +38,25 @@
     return self;
 }
 
-+ (instancetype)popupViewWithParentView:(UIView *)parentView infoDic:(NSDictionary *)infoDic{
-    return [[self alloc] initWithParentView:parentView infoDic:infoDic];
++ (instancetype)popupViewWithParentView:(UITableView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic{
+    return [[self alloc] initWithParentView:parentView bookInfoDic:bookInfoDic];
 }
 
 /**
  创建阴影
  */
-- (void)createCoverWithParentView:(UIView *)parentView alpha:(float)alpha {
-    self.coverView = [[UIView alloc] init];
-    self.coverView.frame = parentView.frame;
-    self.coverView.backgroundColor = [UIColor blackColor];
-    self.coverView.alpha = 0.0;
+- (void)createCoverWithParentView:(UITableView *)parentView alpha:(float)alpha {
+    float coverX = PARENTVIEWOFFSETX;
+    float coverY = PARENTVIEWOFFSETY;
+    float coverW = PARENTVIEWWIDTH;
+    float coverH = PARENTVIEWHEIGHT;
+    UIView *coverView = [[UIView alloc] init];
+    coverView.frame = CGRectMake(coverX, coverY, coverW, coverH);
+    coverView.backgroundColor = [UIColor blackColor];
+    coverView.alpha = 0.0;
+    [parentView addSubview:coverView];
+    self.coverView = coverView;
     
-    [parentView addSubview:self.coverView];
     [UIView animateWithDuration:0.2 animations:^{
         self.coverView.alpha = alpha;
     }];
@@ -72,15 +80,15 @@
 /**
  创建Popup View信息页
  */
-- (void)createPopupViewWithParentView:(UIView *)parentView {
+- (void)createPopupViewWithParentView:(UITableView *)parentView {
     float textSize = 15.0;
     
     UIView *popupView = [[UIView alloc] init];
     // Popup View
-    float detailX = 40;
-    float detailY = detailX;
-    float detailW = parentView.frame.size.width - detailX * 2;
-    float detailH = parentView.frame.size.height - detailX * 2 - 64;
+    float detailX = PARENTVIEWOFFSETX + 40;
+    float detailY = PARENTVIEWOFFSETY + detailX + 64;
+    float detailW = PARENTVIEWWIDTH - detailX * 2;
+    float detailH = PARENTVIEWHEIGHT - detailX * 2 - 64;
     popupView.frame = CGRectMake(detailX, detailY, detailW, detailH);
     popupView.backgroundColor = [UIColor whiteColor];
     popupView.alpha = 1.0;

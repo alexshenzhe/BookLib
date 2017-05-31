@@ -13,8 +13,8 @@
 /**
  创建popupView
  */
-- (instancetype)initWithParentView:(UIView *)parentView infoDic:(NSDictionary *)infoDic;
-+ (instancetype)popupViewWithParentView:(UIView *)parentView infoDic:(NSDictionary *)infoDic;
+- (instancetype)initWithParentView:(UITableView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic;
++ (instancetype)popupViewWithParentView:(UITableView *)parentView bookInfoDic:(NSDictionary *)infbookInfoDicoDic;
 
 
 /**

@@ -114,6 +114,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FA1F11AE1EDC77EB004880DB /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				FA1F11AB1EDC751E004880DB /* Reachability.h */,
+				FA1F11AC1EDC751E004880DB /* Reachability.m */,
+			);
+			name = Reachability;
+			sourceTree = "<group>";
+		};
+		FA1F11AF1EDC77FD004880DB /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				FA4DD6261E9FC0D600E6BF78 /* MBProgressHUD.h */,
+				FA4DD6271E9FC0D600E6BF78 /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
 		FA3098251EA10F01002B108E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,12 +196,10 @@
 		FA3F20DB1E9E824C000937D6 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				FA1F11AB1EDC751E004880DB /* Reachability.h */,
-				FA1F11AC1EDC751E004880DB /* Reachability.m */,
+				FA1F11AF1EDC77FD004880DB /* MBProgressHUD */,
+				FA1F11AE1EDC77EB004880DB /* Reachability */,
 				FA1C6A551E9E804900D0A5D5 /* AppDelegate.h */,
 				FA1C6A561E9E804900D0A5D5 /* AppDelegate.m */,
-				FA4DD6261E9FC0D600E6BF78 /* MBProgressHUD.h */,
-				FA4DD6271E9FC0D600E6BF78 /* MBProgressHUD.m */,
 			);
 			name = Other;
 			sourceTree = "<group>";

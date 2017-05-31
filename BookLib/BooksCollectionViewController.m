@@ -49,12 +49,16 @@ static NSString *const reusecollectionCell = @"collectionCell";
  */
 - (NSMutableArray *)whichSectionForBooksArray {
     NSMutableArray *array = [NSMutableArray array];
-    if (self.tableViewCellSection == 0) {
-        array = self.favoriteBookArray;
-    } else if (self.tableViewCellSection == 1) {
-        array = self.readingBookArray;
-    } else if (self.tableViewCellSection == 2) {
-        array = self.haveReadBookArray;
+    switch (self.tableViewCellSection) {
+        case 0:
+            array = self.favoriteBookArray;
+            break;
+        case 1:
+            array = self.readingBookArray;
+            break;
+        case 2:
+            array = self.haveReadBookArray;
+            break;
     }
     return array;
 }

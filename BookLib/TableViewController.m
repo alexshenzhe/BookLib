@@ -41,7 +41,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self setNavigationBarStyle];
+    [self setNavigationBarStyleWithPopupView:NO];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,15 +56,43 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     return [super initWithStyle:UITableViewStyleGrouped];
 }
 
+#pragma mark - NavigatingBar Style
+
 /**
- 设置子控件frame
+ 设置导航栏样式
  */
-- (void)setNavigationBarStyle {
-    // 设置导航栏按钮及文字
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
-    self.navigationItem.rightBarButtonItem = addButton;
-    self.navigationItem.leftBarButtonItem = nil;
-    self.title = @"首页";
+- (void)setNavigationBarStyleWithPopupView:(BOOL)isPopupView {
+    if (!isPopupView) {
+        // 默认时导航栏
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
+        self.navigationItem.rightBarButtonItem = addButton;
+        self.navigationItem.leftBarButtonItem = nil;
+        self.title = @"首页";
+    } else {
+        // popupView 时导航栏
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelToAddBook)];
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(sureToAddBook)];
+        self.navigationItem.leftBarButtonItem = cancelButton;
+        self.navigationItem.rightBarButtonItem = doneButton;
+    }
+}
+
+- (void)cancelToAddBook {
+    NSLog(@"CANCEL");
+    // 恢复页面滚动
+    self.tableView.scrollEnabled = YES;
+    [self.popupView killCoverAndPopupView];
+    [self setNavigationBarStyleWithPopupView:NO];
+}
+
+- (void)sureToAddBook {
+    NSLog(@"SURE");
+    self.tableView.scrollEnabled = YES;
+    // 保存当前书本信息到待读
+    [self.favoriteBookArray addObject:self.currentDic];
+    [self saveArrayToPlist:self.favoriteBookArray withBookGroup:@"favoriteBook"];
+    [self.popupView killCoverAndPopupView];
+    [self setNavigationBarStyleWithPopupView:NO];
 }
 
 /**
@@ -111,14 +139,17 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
+#pragma mark - Current Method
+
 /**
  扫描条形码
  */
 - (void)captureIsbnByCamera {
     CameraCaptureController *cameraCapture = [[CameraCaptureController alloc] init];
-    [self.navigationController pushViewController:cameraCapture animated:YES];
-    [cameraCapture cameraStartCapture];
     cameraCapture.delegate = self;
+    [self.navigationController pushViewController:cameraCapture animated:YES];
+    // 开始识别条形码
+    [cameraCapture cameraStartCapture];
 }
 
 /**
@@ -135,7 +166,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 检查当前网络是否正常
+ 检查当前网络是否存在
  */
 - (BOOL)checkNetworkStatus {
     BOOL isExistenceNetwork = YES;
@@ -151,6 +182,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
             isExistenceNetwork = YES;
             break;
     }
+    
     if (!isExistenceNetwork) {
         return NO;
     }
@@ -190,6 +222,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         hud.mode = MBProgressHUDModeText;
         hud.label.text = string;
         hud.offset = CGPointMake(0.f, MBProgressMaxOffset);
+        // 持续时间
         [hud hideAnimated:YES afterDelay:2.f];
     });
 }
@@ -217,6 +250,9 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     return _haveReadBookArray;
 }
 
+/**
+ 通用懒加载
+ */
 - (NSMutableArray *)loadingArray:(NSMutableArray *)loadArray withPlistName:(NSString *)plistName {
     NSString *plistPath = [NSString stringWithFormat:@"Documents/%@", plistName];
     NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:plistPath];
@@ -228,36 +264,17 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     return array;
 }
 
+# pragma mark - Show PopupView
 
-# pragma mark - show PopupView
-
-- (void)showPopupDetailViewWithBookInfo:(NSDictionary *)bookInfo {
-    self.popupView = [PopupDetailView popupViewWithParentView:self.view infoDic:bookInfo];
-    // 禁止页面滚动
+/**
+ 显示弹窗
+ */
+- (void)showPopupDetailViewWithBookInfoDic:(NSDictionary *)bookInfoDic {
+    self.popupView = [PopupDetailView popupViewWithParentView:self.tableView bookInfoDic:bookInfoDic];
+    // 禁止tableview页面滚动
     self.tableView.scrollEnabled = NO;
     // 修改导航栏功能
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelToAddBook)];
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(sureToAddBook)];
-    self.navigationItem.leftBarButtonItem = cancelButton;
-    self.navigationItem.rightBarButtonItem = doneButton;
-}
-
-- (void)cancelToAddBook {
-    NSLog(@"CANCEL");
-    // 恢复页面滚动
-    self.tableView.scrollEnabled = YES;
-    [self.popupView killCoverAndPopupView];
-    [self setNavigationBarStyle];
-}
-
-- (void)sureToAddBook {
-    NSLog(@"SURE");
-    self.tableView.scrollEnabled = YES;
-    // 保存当前书本信息到待读
-    [self.favoriteBookArray addObject:self.currentDic];
-    [self saveArrayToPlist:self.favoriteBookArray withBookGroup:@"favoriteBook"];
-    [self.popupView killCoverAndPopupView];
-    [self setNavigationBarStyle];
+    [self setNavigationBarStyleWithPopupView:YES];
 }
 
 # pragma mark - DetailViewControllerDelegate
@@ -265,13 +282,18 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 -(void)DetailViewControllerDelegate:(DetailViewController *)detailViewController withIndexPath:(NSIndexPath *)indexPath andTableViewCellSection:(NSInteger)section fromBookGroup:(NSString *)bookGroupFrom toBookGroup:(NSString *)bookGroupTo {
     NSMutableArray *arrayFrom = [NSMutableArray array];
     NSMutableArray *arrayTo = [NSMutableArray array];
+    
     //  判断当前所属组
-    if (section == 0) {
-        arrayFrom = self.favoriteBookArray;
-    } else if (section == 1) {
-        arrayFrom = self.readingBookArray;
-    } else if (section == 2) {
-        arrayFrom = self.haveReadBookArray;
+    switch (section) {
+        case 0:
+            arrayFrom = self.favoriteBookArray;
+            break;
+        case 1:
+            arrayFrom = self.readingBookArray;
+            break;
+        case 2:
+            arrayFrom = self.haveReadBookArray;
+            break;
     }
     // 在当前组删除书本信息
     [arrayFrom removeObjectAtIndex:indexPath.row];
@@ -281,7 +303,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }
-    // 判断选择保存的组
+    // 判断组并保存
     if ([bookGroupTo isEqualToString:@"favoriteBook"]) {
         arrayTo = self.favoriteBookArray;
     } else if ([bookGroupTo isEqualToString:@"readingBook"]) {
@@ -298,7 +320,6 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 # pragma mark - BooksCollectionViewControllerDelegate
 
 - (void)booksConllectionViewController:(BooksCollectionViewController *)booksConllectionViewController didSelectAtItemIndexPath:(NSIndexPath *)indexPath withTableViewSection:(NSInteger)section withData:(NSDictionary *)dic {
-    NSLog(@"我选择了NO.%ld，title:%@", indexPath.row, dic[@"title"]);
     self.detailViewController = [[DetailViewController alloc] init];
     self.detailViewController.delegate = self;
     // 传递组信息
@@ -323,24 +344,32 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     NSString *errorCode = dic[@"code"];
     if (errorCode) {
         NSString *errorString = [NSString stringWithFormat:@"查询失败，错误代码为%@", errorCode];
-        NSLog(@"errorString%@", errorString);
         [self errorHUDWithString:errorString];
         return;
     }
     self.currentDic = dic;
-    [self showPopupDetailViewWithBookInfo:dic];
+    [self showPopupDetailViewWithBookInfoDic:dic];
 }
 
 #pragma mark - TableViewDataSource
 
+/**
+ 组
+ */
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
 }
 
+/**
+ 行
+ */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }
 
+/**
+ 行数据
+ */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BooksCollectionViewController *collectionViewController = [[BooksCollectionViewController alloc] init];
     // 为不同组添加内容
@@ -361,14 +390,23 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     return self.tableViewCell;
 }
 
+/**
+ 行高
+ */
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 314;
 }
 
+/**
+ 头标题高
+ */
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 30;
 }
 
+/**
+ 头标题
+ */
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *headerString = [NSString string];
     if (section == 0) {
