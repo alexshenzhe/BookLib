@@ -16,6 +16,7 @@
 @property (nonatomic, weak) UILabel *publisherLabel; // 出版社
 @property (nonatomic, weak) UILabel *priceLabel; // 价格
 @property (nonatomic, weak) UILabel *pubdateLabel; // 出版时间
+@property (nonatomic, weak) UILabel *isbnLabel; // ISBN码
 @property (nonatomic, weak) UILabel *ratingLabelTitle; // 评分标题
 @property (nonatomic, weak) UILabel *ratingLabel; // 评分
 @property (nonatomic, weak) UIButton *authorIntroButton; // 作者简介按钮
@@ -179,9 +180,19 @@
     [self.view addSubview:pubdateLabel];
     self.pubdateLabel = pubdateLabel;
     
+    // ISBN码
+    float isbnX = authorX;
+    float isbnY = pubdateH + pubdateY;
+    float isbnW = authorW;
+    float isbnH = authorH;
+    UILabel *isbnLabel = [[UILabel alloc] initWithFrame:CGRectMake(isbnX, isbnY, isbnW, isbnH)];
+    isbnLabel.font = [UIFont systemFontOfSize:textSize];
+    [self.view addSubview:isbnLabel];
+    self.isbnLabel = isbnLabel;
+    
     // 评分
     float ratingX = authorX;
-    float ratingY = pubdateH + pubdateY;
+    float ratingY = isbnH + isbnY;
     float ratingW = authorW;
     float ratingH = authorH;
     UILabel *ratingLabelTitle = [[UILabel alloc] initWithFrame:CGRectMake(ratingX, ratingY, ratingW, ratingH)];
@@ -246,13 +257,15 @@
     } else {
         authors = [authorArray lastObject];
     }
-    self.authorLabel.text = [NSString stringWithFormat:@"作者：%@", authors];
+    self.authorLabel.text = [NSString stringWithFormat:@"作者 %@", authors];
     // 出版社
-    self.publisherLabel.text = [NSString stringWithFormat:@"出版社：%@", self.bookInfoDic[@"publisher"]];
+    self.publisherLabel.text = [NSString stringWithFormat:@"出版社 %@", self.bookInfoDic[@"publisher"]];
     // 价格
-    self.priceLabel.text = [NSString stringWithFormat:@"定价：%@", self.bookInfoDic[@"price"]];
+    self.priceLabel.text = [NSString stringWithFormat:@"定价 %@", self.bookInfoDic[@"price"]];
     // 出版日期
-    self.pubdateLabel.text = [NSString stringWithFormat:@"出版年：%@", self.bookInfoDic[@"pubdate"]];
+    self.pubdateLabel.text = [NSString stringWithFormat:@"出版年 %@", self.bookInfoDic[@"pubdate"]];
+    // ISBN码
+    self.isbnLabel.text = [NSString stringWithFormat:@"ISBN %@", self.bookInfoDic[@"isbn13"]];
     // 评分
     self.ratingLabelTitle.text = @"豆瓣评分：";
     self.ratingLabel.text = self.bookInfoDic[@"rating"][@"average"];
