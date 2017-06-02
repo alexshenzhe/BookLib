@@ -210,7 +210,7 @@
     float buttonW = 100;
     float buttonH = authorH;
     float buttonX = (screenWidth - ((buttonW + space) * numOfButton - space)) * 0.5;
-    float buttonY = imageY + imageH + 5;
+    float buttonY = imageY + imageH + 20;
     UIButton *authorIntroButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX, buttonY, buttonW, buttonH)];
     UIButton *summaryButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX + buttonW + space, buttonY, buttonW, buttonH)];
     UIButton *catalogButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX + buttonW * 2 + space * 2, buttonY, buttonW, buttonH)];
@@ -229,7 +229,7 @@
     
     // 作者简介／概要／目录
     float authorIntroX = imageX;
-    float authorIntroY = buttonY + buttonH;
+    float authorIntroY = buttonY + buttonH + 10;
     float authorIntroW = self.view.bounds.size.width - imageX * 2;
     float authorIntroH = self.view.bounds.size.height - authorIntroY - imageX;
     UITextView *IntroTextView = [[UITextView alloc] initWithFrame:CGRectMake(authorIntroX, authorIntroY, authorIntroW, authorIntroH)];

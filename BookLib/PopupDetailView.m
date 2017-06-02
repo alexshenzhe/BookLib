@@ -104,25 +104,24 @@
     float imageX = (detailW - imageW) * 0.5;
     float imageY = 10;
     UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
-    bookImageView.backgroundColor = [UIColor redColor];
     [self.popupView addSubview:bookImageView];
     self.bookImageView = bookImageView;
     
     // 书名
-    float titleX = 0;
+    float titleX = 10;
     float titleY = imageH + imageY * 2;
-    float titleW = detailW;
+    float titleW = detailW - titleX * 2;
     float titleH = 20;
     UILabel *bookTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(titleX, titleY, titleW, titleH)];
     bookTitleLabel.textAlignment = NSTextAlignmentCenter;
-    bookTitleLabel.font = [UIFont systemFontOfSize:textSize];
+    bookTitleLabel.font = [UIFont systemFontOfSize:20];
     [self.popupView addSubview:bookTitleLabel];
     self.bookTitleLabel = bookTitleLabel;
     
     // 作者
     float authorX = titleX;
-    float authorY = titleH + titleY;
-    float authorW = detailW;
+    float authorY = titleH + titleY + imageY;
+    float authorW = titleW;
     float authorH = titleH;
     UILabel *authorLabel = [[UILabel alloc]initWithFrame:CGRectMake(authorX, authorY, authorW, authorH)];
     authorLabel.textAlignment = NSTextAlignmentCenter;
@@ -145,7 +144,7 @@
     float summaryX = titleX;
     float summaryY = publisherH + publisherY + imageY;
     float summaryW = titleW;
-    float summaryH = detailH - (publisherH + publisherY);
+    float summaryH = detailH - (summaryY + 10);
     UITextView *summaryTextView = [[UITextView alloc] initWithFrame:CGRectMake(summaryX, summaryY, summaryW, summaryH)];
     summaryTextView.editable = NO;
     [self.popupView addSubview:summaryTextView];

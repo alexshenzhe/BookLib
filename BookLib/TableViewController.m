@@ -74,6 +74,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(sureToAddBook)];
         self.navigationItem.leftBarButtonItem = cancelButton;
         self.navigationItem.rightBarButtonItem = doneButton;
+        self.title = @"简介";
     }
 }
 
