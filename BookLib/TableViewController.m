@@ -15,7 +15,7 @@
 #import "BooksCollectionViewController.h"
 #import "BooksCollectionViewCell.h"
 #import "DetailViewController.h"
-#import "PopupDetailView.h"
+#import "PopupView.h"
 #import "Reachability.h"
 
 @interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate, BooksCollectionViewControllerDelegate, DetailViewControllerDelegate, UICollectionViewDelegate>
@@ -30,7 +30,7 @@
 @property (nonatomic, strong) NSDictionary *currentDic; // 存储当前新增书本信息
 @property (nonatomic, strong) JSONAnalysis *jsonAnalysis;
 @property (nonatomic, strong) TableViewCell *tableViewCell;
-@property (nonatomic, strong) PopupDetailView *popupView;
+@property (nonatomic, strong) PopupView *popupView;
 
 @end
 
@@ -67,7 +67,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
         self.navigationItem.rightBarButtonItem = addButton;
         self.navigationItem.leftBarButtonItem = nil;
-        self.title = @"首页";
+        self.title = @"书架";
     } else {
         // popupView 时导航栏
         UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelToAddBook)];
@@ -271,7 +271,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
  显示弹窗
  */
 - (void)showPopupDetailViewWithBookInfoDic:(NSDictionary *)bookInfoDic {
-    self.popupView = [PopupDetailView popupViewWithParentView:self.tableView bookInfoDic:bookInfoDic];
+    self.popupView = [PopupView popupViewForDetailWithView:self.tableView bookInfoDic:bookInfoDic];
     // 禁止tableview页面滚动
     self.tableView.scrollEnabled = NO;
     // 修改导航栏功能

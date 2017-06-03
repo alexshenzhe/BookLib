@@ -8,6 +8,7 @@
 
 #import "DetailViewController.h"
 #import "MBProgressHUD.h"
+#import "PopupView.h"
 
 @interface DetailViewController ()
 
@@ -22,8 +23,8 @@
 @property (nonatomic, weak) UIButton *authorIntroButton; // 作者简介按钮
 @property (nonatomic, weak) UIButton *summaryButton; // 内容简介按钮
 @property (nonatomic, weak) UIButton *catalogButton; // 目录按钮
-@property (nonatomic, weak) UITextView *IntroTextView; // 简介显示文本
-
+@property (nonatomic, weak) UITextView *introTextView; // 简介显示文本
+@property (nonatomic, strong) PopupView *popupView;
 @end
 
 @implementation DetailViewController
@@ -31,7 +32,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self setNavigationBarStyle];
+    [self setNavigationBarStyleWithPopupView:NO];
     [self subviewsFrame];
     [self subviewsData];
 }
@@ -60,12 +61,25 @@
 /**
  设置导航栏内容
  */
-- (void)setNavigationBarStyle {
-    UIBarButtonItem *changeBookGroupButton = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editBookGroup)];
-    self.navigationItem.rightBarButtonItem = changeBookGroupButton;
-    
-    NSString *titleString = self.bookInfoDic[@"title"];
-    self.title = titleString;
+- (void)setNavigationBarStyleWithPopupView:(BOOL)isPopupView {
+    if (!isPopupView) {
+        UIBarButtonItem *changeBookGroupButton = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editBookGroup)];
+        self.navigationItem.rightBarButtonItem = changeBookGroupButton;
+        self.navigationItem.leftBarButtonItem = nil;
+        
+        self.title = self.bookInfoDic[@"title"];
+    } else {
+        UIBarButtonItem *closePopupViewButton = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(closePopupView)];
+        self.navigationItem.leftBarButtonItem = closePopupViewButton;
+        self.navigationItem.rightBarButtonItem = nil;
+        
+        self.title = self.bookInfoDic[@"title"];
+    }
+}
+
+- (void)closePopupView {
+    [self.popupView killCoverAndPopupView];
+    [self setNavigationBarStyleWithPopupView:NO];
 }
 
 /**
@@ -124,7 +138,7 @@
  设置子控件的frame
  */
 - (void)subviewsFrame {
-    float textSize = 15.0;
+    float textSize = 13.0;
     float raingSize = 30.0;
     float introSize = 15.0;
     float titleSize = 18.0;
@@ -137,6 +151,12 @@
     float imageH = imageW * 1.4;
     UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     bookImageView.backgroundColor = [UIColor purpleColor];
+    // 添加四个边阴影
+    bookImageView.layer.shadowColor = [UIColor blackColor].CGColor;
+    bookImageView.layer.shadowOffset = CGSizeMake(0, 0); // 阴影偏移
+    bookImageView.layer.shadowOpacity = 0.5; // 阴影透明度
+    bookImageView.layer.shadowRadius = 5.0; // 阴影半径
+    
     [self.view addSubview:bookImageView];
     self.bookImageView = bookImageView;
     
@@ -232,11 +252,22 @@
     float authorIntroY = buttonY + buttonH + 10;
     float authorIntroW = self.view.bounds.size.width - imageX * 2;
     float authorIntroH = self.view.bounds.size.height - authorIntroY - imageX;
-    UITextView *IntroTextView = [[UITextView alloc] initWithFrame:CGRectMake(authorIntroX, authorIntroY, authorIntroW, authorIntroH)];
-    IntroTextView.editable = NO;
-    IntroTextView.font = [UIFont systemFontOfSize:introSize];
-    [self.view addSubview:IntroTextView];
-    self.IntroTextView = IntroTextView;
+    UITextView *introTextView = [[UITextView alloc] initWithFrame:CGRectMake(authorIntroX, authorIntroY, authorIntroW, authorIntroH)];
+    introTextView.editable = NO;
+    introTextView.showsVerticalScrollIndicator = NO;
+    introTextView.font = [UIFont systemFontOfSize:introSize];
+    [self.view addSubview:introTextView];
+    self.introTextView = introTextView;
+    
+    UIButton *buttonadd = [[UIButton alloc] initWithFrame:CGRectMake(100, 100, 100, 50)];
+    buttonadd.backgroundColor = [UIColor blueColor];
+    [buttonadd addTarget:self action:@selector(showPopupView) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:buttonadd];
+}
+
+- (void)showPopupView {
+    [self setNavigationBarStyleWithPopupView:YES];
+    self.popupView = [PopupView popupViewForCopyrightInfoWithView:self.view bookInfoDic:self.bookInfoDic];
 }
 
 /**
@@ -321,7 +352,7 @@
         [self errorHUDWithString:@"无相关内容"];
         introString = @"空";
     }
-    self.IntroTextView.text = introString;
+    self.introTextView.text = introString;
 }
 
 

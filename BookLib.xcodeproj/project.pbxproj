@@ -19,7 +19,7 @@
 		FA3F20CE1E9E814A000937D6 /* DoubanData.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C21E9E814A000937D6 /* DoubanData.m */; };
 		FA3F20D01E9E814A000937D6 /* JSONAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3F20C51E9E814A000937D6 /* JSONAnalysis.m */; };
 		FA4DD6281E9FC0D600E6BF78 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4DD6271E9FC0D600E6BF78 /* MBProgressHUD.m */; };
-		FA5725191EADE70700699FD5 /* PopupDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5725181EADE70700699FD5 /* PopupDetailView.m */; };
+		FA5725191EADE70700699FD5 /* PopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5725181EADE70700699FD5 /* PopupView.m */; };
 		FAB347D41EA4D38F0069D02A /* BooksCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB347D31EA4D38F0069D02A /* BooksCollectionViewController.m */; };
 		FAB347D71EA510C00069D02A /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB347D61EA510C00069D02A /* TableViewController.m */; };
 		FAB347DA1EA511240069D02A /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB347D91EA511240069D02A /* TableViewCell.m */; };
@@ -50,8 +50,8 @@
 		FA3F20C51E9E814A000937D6 /* JSONAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSONAnalysis.m; path = testProject/JSONAnalysis.m; sourceTree = "<group>"; };
 		FA4DD6261E9FC0D600E6BF78 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		FA4DD6271E9FC0D600E6BF78 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		FA5725171EADE70700699FD5 /* PopupDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupDetailView.h; sourceTree = "<group>"; };
-		FA5725181EADE70700699FD5 /* PopupDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupDetailView.m; sourceTree = "<group>"; };
+		FA5725171EADE70700699FD5 /* PopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupView.h; sourceTree = "<group>"; };
+		FA5725181EADE70700699FD5 /* PopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupView.m; sourceTree = "<group>"; };
 		FAB347D21EA4D38F0069D02A /* BooksCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooksCollectionViewController.h; sourceTree = "<group>"; };
 		FAB347D31EA4D38F0069D02A /* BooksCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooksCollectionViewController.m; sourceTree = "<group>"; };
 		FAB347D51EA510C00069D02A /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
@@ -170,8 +170,8 @@
 				FA3F20C01E9E814A000937D6 /* BooksCollectionViewCell.m */,
 				FAB347D81EA511240069D02A /* TableViewCell.h */,
 				FAB347D91EA511240069D02A /* TableViewCell.m */,
-				FA5725171EADE70700699FD5 /* PopupDetailView.h */,
-				FA5725181EADE70700699FD5 /* PopupDetailView.m */,
+				FA5725171EADE70700699FD5 /* PopupView.h */,
+				FA5725181EADE70700699FD5 /* PopupView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -278,7 +278,7 @@
 			files = (
 				FAB347D71EA510C00069D02A /* TableViewController.m in Sources */,
 				FAB347DA1EA511240069D02A /* TableViewCell.m in Sources */,
-				FA5725191EADE70700699FD5 /* PopupDetailView.m in Sources */,
+				FA5725191EADE70700699FD5 /* PopupView.m in Sources */,
 				FAFD2A611E9F92560078247D /* BooksNavController.m in Sources */,
 				FA3F20CD1E9E814A000937D6 /* BooksCollectionViewCell.m in Sources */,
 				FA3F20D01E9E814A000937D6 /* JSONAnalysis.m in Sources */,
