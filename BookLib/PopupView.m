@@ -8,10 +8,6 @@
 
 #import "PopupView.h"
 
-#define PARENTVIEWWIDTH (parentView.bounds.size.width)
-#define PARENTVIEWHEIGHT (parentView.bounds.size.height)
-#define PARENTVIEWOFFSETX (parentView.contentOffset.x)
-#define PARENTVIEWOFFSETY (parentView.contentOffset.y)
 @interface PopupView ()
 
 @property (nonatomic, weak) UIImageView *bookImageView; // 封面
@@ -31,45 +27,88 @@
 
 @implementation PopupView
 
+
+# pragma mark - Cover View
+
+/**
+ 创建阴影
+ */
+- (void)showCoverAddToView:(UIView *)view orTableView:(UITableView *)tableView alpha:(float)alpha {
+    UIView *coverView = [[UIView alloc] init];
+    if (view) {
+        coverView.frame = view.frame;
+        [view addSubview:coverView];
+    } else if (tableView) {
+        float coverX = tableView.contentOffset.x;
+        float coverY = tableView.contentOffset.y;
+        float coverW = tableView.bounds.size.width;
+        float coverH = tableView.bounds.size.height;
+        coverView.frame = CGRectMake(coverX, coverY, coverW, coverH);
+        [tableView addSubview:coverView];
+    }
+    self.coverView = coverView;
+    self.coverView.backgroundColor = [UIColor blackColor];
+    self.coverView.alpha = 0.0;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.coverView.alpha = alpha;
+    }];
+}
+
+/**
+ 清除阴影
+ */
+- (void)hideCoverAndPopupView {
+    [UIView animateWithDuration:0.5 animations:^{
+        self.coverView.alpha = 0.0;
+        self.popupView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [self.popupView removeFromSuperview];
+        self.popupView = nil;
+        [self.coverView removeFromSuperview];
+        self.coverView = nil;
+    }];
+}
+
 # pragma mark - Detail Popup View
 
 /**
  创建Detail PopupView
  */
-- (instancetype)initPopupViewForDetailWithView:(UITableView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic {
+- (instancetype)initPopupViewForDetailWithTableView:(UITableView *)parentTableView bookInfoDic:(NSDictionary *)bookInfoDic {
     self = [super init];
     if (self) {
         self.bookInfoDic = bookInfoDic;
-        [self showCoverWithParentView:parentView alpha:0.7];
-        [self showPopupViewForDetailWithView:parentView];
+//        [self showCoverWithTableView:parentTableView alpha:0.7];
+        [self showCoverAddToView:nil orTableView:parentTableView alpha:0.7];
+        [self showPopupViewForDetailWithTableView:parentTableView];
         [self showPopupViewForDetailData];
     }
     return self;
 }
 
-+ (instancetype)popupViewForDetailWithView:(UITableView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic {
-    return [[self alloc] initPopupViewForDetailWithView:parentView bookInfoDic:bookInfoDic];
++ (instancetype)popupViewForDetailWithTableView:(UITableView *)parentTableView bookInfoDic:(NSDictionary *)bookInfoDic {
+    return [[self alloc] initPopupViewForDetailWithTableView:parentTableView bookInfoDic:bookInfoDic];
 }
 
 /**
  创建Detail PopupView信息页frame
  */
-- (void)showPopupViewForDetailWithView:(UITableView *)parentView {
+- (void)showPopupViewForDetailWithTableView:(UITableView *)parentTableView {
     float textSize = 15.0;
     
     UIView *popupView = [[UIView alloc] init];
     // Popup View
-    float popupViewX = PARENTVIEWOFFSETX + 40;
-    float popupViewY = PARENTVIEWOFFSETY + popupViewX + 64;
-    float popupViewW = PARENTVIEWWIDTH - popupViewX * 2;
-    float popupViewH = PARENTVIEWHEIGHT - popupViewX * 2 - 64;
+    float popupViewX = parentTableView.contentOffset.x + 40;
+    float popupViewY = parentTableView.contentOffset.y + popupViewX + 64;
+    float popupViewW = parentTableView.bounds.size.width - popupViewX * 2;
+    float popupViewH = parentTableView.bounds.size.height - popupViewX * 2 - 64;
     popupView.frame = CGRectMake(popupViewX, popupViewY, popupViewW, popupViewH);
     popupView.backgroundColor = [UIColor whiteColor];
     popupView.alpha = 0.0;
     // 圆角
     popupView.layer.cornerRadius = 10.0;
     popupView.layer.masksToBounds = YES;
-    [parentView addSubview:popupView];
+    [parentTableView addSubview:popupView];
     [UIView animateWithDuration:0.5 animations:^{
         popupView.alpha = 1.0;
     }];
@@ -141,10 +180,8 @@
     // 封面
     NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
     self.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-    
     // 书名
     self.bookTitleLabel.text = self.bookInfoDic[@"title"];
-    
     // 作者
     NSArray *authorArray = [NSArray array];
     authorArray = self.bookInfoDic[@"author"];
@@ -157,10 +194,8 @@
         authors = [authorArray lastObject];
     }
     self.authorLabel.text = authors;
-    
     // 出版社
     self.publisherLabel.text = self.bookInfoDic[@"publisher"];
-    
     // 简介
     self.summaryTextView.text = self.bookInfoDic[@"summary"];
 }
@@ -174,7 +209,7 @@
     self = [super init];
     if (self) {
         self.bookInfoDic = bookInfoDic;
-        [self showCoverWithView:parentView alpha:0.7];
+        [self showCoverAddToView:parentView orTableView:nil alpha:0.7];
         [self showPopupViewForCopyrightInfoWithView:parentView];
         [self showPopupViewForCopyrightInfoData];
     }
@@ -189,8 +224,6 @@
  创建版权页 PopupView的frame
  */
 - (void)showPopupViewForCopyrightInfoWithView:(UIView *)parentView {
-    float textSize = 15.0;
-    
     UIView *popupView = [[UIView alloc] init];
     // Popup View
     float popupViewW = 300;
@@ -208,22 +241,25 @@
         popupView.alpha = 1.0;
     }];
     self.popupView = popupView;
+
+    float textSize = 15.0;
+    float defauleLabelW = 50;
+    float defaultLabelH = 30;
     
     // title
     float titleX = 0;
     float titleY = 30;
     float titleW = popupViewW;
-    float titleH = 30;
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleX, titleY, titleW, titleH)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleX, titleY, titleW, defaultLabelH)];
     titleLabel.text = @"版权信息";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.popupView addSubview:titleLabel];
     
-    float defauleLabelW = 50;
-    float defaultLabelH = 30;
     // 出版社
     float publisherX = 15;
     float publisherY = titleY * 2.5;
+    float dataX = 70;
+    float dataW = popupViewW - defauleLabelW - publisherX * 2;
     UILabel *publisherTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(publisherX, publisherY, defauleLabelW, defaultLabelH)];
     publisherTextLabel.font = [UIFont systemFontOfSize:textSize];
     publisherTextLabel.textColor = [UIColor darkGrayColor];
@@ -231,7 +267,7 @@
     publisherTextLabel.textAlignment = NSTextAlignmentLeft;
     [self.popupView addSubview:publisherTextLabel];
     
-    UILabel *publisherLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, publisherY, 215, defaultLabelH)];
+    UILabel *publisherLabel = [[UILabel alloc] initWithFrame:CGRectMake(dataX, publisherY, dataW, defaultLabelH)];
     publisherLabel.font = [UIFont systemFontOfSize:textSize];
     publisherLabel.textAlignment = NSTextAlignmentRight;
     [self.popupView addSubview:publisherLabel];
@@ -247,7 +283,7 @@
     pubdateTextLabel.textAlignment = NSTextAlignmentLeft;
     [self.popupView addSubview:pubdateTextLabel];
     
-    UILabel *pubdateLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, pubdateY, 215, defaultLabelH)];
+    UILabel *pubdateLabel = [[UILabel alloc] initWithFrame:CGRectMake(dataX, pubdateY, dataW, defaultLabelH)];
     pubdateLabel.font = [UIFont systemFontOfSize:textSize];
     pubdateLabel.textAlignment = NSTextAlignmentRight;
     [self.popupView addSubview:pubdateLabel];
@@ -263,7 +299,7 @@
     isbnTextLabel.textAlignment = NSTextAlignmentLeft;
     [self.popupView addSubview:isbnTextLabel];
     
-    UILabel *isbnLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, isbnY, 215, defaultLabelH)];
+    UILabel *isbnLabel = [[UILabel alloc] initWithFrame:CGRectMake(dataX, isbnY, dataW, defaultLabelH)];
     isbnLabel.font = [UIFont systemFontOfSize:textSize];
     isbnLabel.textAlignment = NSTextAlignmentRight;
     [self.popupView addSubview:isbnLabel];
@@ -279,7 +315,7 @@
     priceTextLabel.textAlignment = NSTextAlignmentLeft;
     [self.popupView addSubview:priceTextLabel];
     
-    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, priceY, 215, defaultLabelH)];
+    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(dataX, priceY, dataW, defaultLabelH)];
     priceLabel.font = [UIFont systemFontOfSize:textSize];
     priceLabel.textAlignment = NSTextAlignmentRight;
     [self.popupView addSubview:priceLabel];
@@ -300,6 +336,19 @@
     pagesLabel.textAlignment = NSTextAlignmentRight;
     [self.popupView addSubview:pagesLabel];
     self.pagesLabel = pagesLabel;
+    
+    // 关闭按钮
+    float closeButtonW = popupViewW;
+    float closeButtonH = 40;
+    float closeButtonX = 0;
+    float closeButtonY = popupViewH - closeButtonH;
+    UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(closeButtonX, closeButtonY, closeButtonW, closeButtonH)];
+    [closeButton setTitle:@"关闭" forState:UIControlStateNormal];
+    closeButton.titleLabel.font = [UIFont systemFontOfSize:textSize];
+    [closeButton addTarget:self action:@selector(hideCoverAndPopupView) forControlEvents:UIControlEventTouchUpInside];
+    closeButton.titleLabel.font = [UIFont systemFontOfSize:textSize];
+    [closeButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    [self.popupView addSubview:closeButton];
 }
 
 /**
@@ -316,56 +365,6 @@
     self.priceLabel.text = self.bookInfoDic[@"price"];
     // 页数
     self.pagesLabel.text = self.bookInfoDic[@"pages"];
-}
-
-# pragma mark - Cover View
-
-/**
- 创建阴影
- */
-- (void)showCoverWithParentView:(UITableView *)parentView alpha:(float)alpha {
-    float coverX = PARENTVIEWOFFSETX;
-    float coverY = PARENTVIEWOFFSETY;
-    float coverW = PARENTVIEWWIDTH;
-    float coverH = PARENTVIEWHEIGHT;
-    UIView *coverView = [[UIView alloc] init];
-    coverView.frame = CGRectMake(coverX, coverY, coverW, coverH);
-    coverView.backgroundColor = [UIColor blackColor];
-    coverView.alpha = 0.0;
-    [parentView addSubview:coverView];
-    self.coverView = coverView;
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        self.coverView.alpha = alpha;
-    }];
-}
-
-- (void)showCoverWithView:(UIView *)parentView alpha:(float)alpha {
-    UIView *coverView = [[UIView alloc] init];
-    coverView.frame = parentView.frame;
-    coverView.backgroundColor = [UIColor blackColor];
-    coverView.alpha = 0.0;
-    [parentView addSubview:coverView];
-    self.coverView = coverView;
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        self.coverView.alpha = alpha;
-    }];
-}
-
-/**
- 清除阴影
- */
-- (void)killCoverAndPopupView {
-    [UIView animateWithDuration:0.5 animations:^{
-        self.coverView.alpha = 0.0;
-        self.popupView.alpha = 0.0;
-    } completion:^(BOOL finished) {
-        [self.popupView removeFromSuperview];
-        self.popupView = nil;
-        [self.coverView removeFromSuperview];
-        self.coverView = nil;
-    }];
 }
 
 @end

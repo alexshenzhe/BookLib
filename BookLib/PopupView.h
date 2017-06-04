@@ -13,14 +13,14 @@
 /**
  创建Detail PopupView
  */
-- (instancetype)initPopupViewForDetailWithView:(UITableView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic;
-+ (instancetype)popupViewForDetailWithView:(UITableView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic;
+- (instancetype)initPopupViewForDetailWithTableView:(UITableView *)parentTableView bookInfoDic:(NSDictionary *)bookInfoDic;
++ (instancetype)popupViewForDetailWithTableView:(UITableView *)parentTableView bookInfoDic:(NSDictionary *)bookInfoDic;
 
-- (instancetype)initPopupViewForCopyrightInfoWithView:(UIView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic;
-+ (instancetype)popupViewForCopyrightInfoWithView:(UIView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic;
+- (instancetype)initPopupViewForCopyrightInfoWithView:(UIView *)view bookInfoDic:(NSDictionary *)bookInfoDic;
++ (instancetype)popupViewForCopyrightInfoWithView:(UIView *)view bookInfoDic:(NSDictionary *)bookInfoDic;
 /**
  清除阴影及popupView
  */
-- (void)killCoverAndPopupView;
+- (void)hideCoverAndPopupView;
 
 @end

@@ -13,16 +13,19 @@
 @interface DetailViewController ()
 
 @property (nonatomic, weak) UIImageView *bookImageView; // 封面
+@property (nonatomic, weak) UILabel *authorTitleLabel; // 作者标题
 @property (nonatomic, weak) UILabel *authorLabel; // 作者
-@property (nonatomic, weak) UILabel *publisherLabel; // 出版社
+//@property (nonatomic, weak) UILabel *publisherLabel; // 出版社
+@property (nonatomic, weak) UILabel *priceTitleLabel; // 价格标题
 @property (nonatomic, weak) UILabel *priceLabel; // 价格
-@property (nonatomic, weak) UILabel *pubdateLabel; // 出版时间
-@property (nonatomic, weak) UILabel *isbnLabel; // ISBN码
-@property (nonatomic, weak) UILabel *ratingLabelTitle; // 评分标题
+//@property (nonatomic, weak) UILabel *pubdateLabel; // 出版时间
+//@property (nonatomic, weak) UILabel *isbnLabel; // ISBN码
+@property (nonatomic, weak) UILabel *ratingTitleLabel; // 评分标题
 @property (nonatomic, weak) UILabel *ratingLabel; // 评分
 @property (nonatomic, weak) UIButton *authorIntroButton; // 作者简介按钮
 @property (nonatomic, weak) UIButton *summaryButton; // 内容简介按钮
 @property (nonatomic, weak) UIButton *catalogButton; // 目录按钮
+@property (nonatomic, weak) UIButton *copyrightButton; // 版权信息按钮
 @property (nonatomic, weak) UITextView *introTextView; // 简介显示文本
 @property (nonatomic, strong) PopupView *popupView;
 @end
@@ -32,7 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self setNavigationBarStyleWithPopupView:NO];
+    [self setNavigationBarStyle];
     [self subviewsFrame];
     [self subviewsData];
 }
@@ -61,25 +64,12 @@
 /**
  设置导航栏内容
  */
-- (void)setNavigationBarStyleWithPopupView:(BOOL)isPopupView {
-    if (!isPopupView) {
-        UIBarButtonItem *changeBookGroupButton = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editBookGroup)];
-        self.navigationItem.rightBarButtonItem = changeBookGroupButton;
-        self.navigationItem.leftBarButtonItem = nil;
-        
-        self.title = self.bookInfoDic[@"title"];
-    } else {
-        UIBarButtonItem *closePopupViewButton = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(closePopupView)];
-        self.navigationItem.leftBarButtonItem = closePopupViewButton;
-        self.navigationItem.rightBarButtonItem = nil;
-        
-        self.title = self.bookInfoDic[@"title"];
-    }
-}
-
-- (void)closePopupView {
-    [self.popupView killCoverAndPopupView];
-    [self setNavigationBarStyleWithPopupView:NO];
+- (void)setNavigationBarStyle {
+    UIBarButtonItem *changeBookGroupButton = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editBookGroup)];
+    self.navigationItem.rightBarButtonItem = changeBookGroupButton;
+    self.navigationItem.leftBarButtonItem = nil;
+    
+    self.title = self.bookInfoDic[@"title"];
 }
 
 /**
@@ -161,74 +151,75 @@
     self.bookImageView = bookImageView;
     
     // 作者
-    float authorX = imageW + imageX * 2;
-    float authorY = imageY;
-    float authorW = screenWidth - imageW - imageX * 3;
-    float authorH = imageH / 7;
-    UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(authorX, authorY, authorW, authorH)];
+    float authorTitleX = imageW + imageX * 2;
+    float authorTitleY = imageY;
+    float authorTitleW = 60;
+    float authorTitleH = imageH / 7;
+    float authorW = screenWidth - (authorTitleX + authorTitleW + imageX);
+    UILabel *authorTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(authorTitleX, authorTitleY, authorTitleW, authorTitleH)];
+    authorTitleLabel.font = [UIFont systemFontOfSize:textSize];
+    authorTitleLabel.textColor = [UIColor darkGrayColor];
+    [self.view addSubview:authorTitleLabel];
+    self.authorTitleLabel = authorTitleLabel;
+    
+    UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(authorTitleX + authorTitleW, authorTitleY, authorW, authorTitleH)];
     authorLabel.font = [UIFont systemFontOfSize:textSize];
+    authorLabel.textAlignment = NSTextAlignmentRight;
     [self.view addSubview:authorLabel];
     self.authorLabel = authorLabel;
     
-    // 出版社
-    float publisherX = authorX;
-    float publisherY = authorH + authorY;
-    float publisherW = authorW;
-    float publisherH = authorH;
-    UILabel *publisherLabel = [[UILabel alloc] initWithFrame:CGRectMake(publisherX, publisherY, publisherW, publisherH)];
-    publisherLabel.font = [UIFont systemFontOfSize:textSize];
-    [self.view addSubview:publisherLabel];
-    self.publisherLabel = publisherLabel;
-    
     // 价格
-    float priceX = authorX;
-    float priceY = publisherH + publisherY;
-    float priceW = authorW;
-    float priceH = authorH;
-    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(priceX, priceY, priceW, priceH)];
+    float priceTitleX = authorTitleX;
+    float priceTitleY = authorTitleY + authorTitleH;
+    float priceTitleW = authorTitleW;
+    float priceTitleH = authorTitleH;
+    UILabel *priceTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(priceTitleX, priceTitleY, priceTitleW, priceTitleH)];
+    priceTitleLabel.font = [UIFont systemFontOfSize:textSize];
+    priceTitleLabel.textColor = [UIColor darkGrayColor];
+    [self.view addSubview:priceTitleLabel];
+    self.priceTitleLabel = priceTitleLabel;
+    
+    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(priceTitleX + priceTitleW, priceTitleY, authorW, priceTitleH)];
     priceLabel.font = [UIFont systemFontOfSize:textSize];
+    priceLabel.textAlignment = NSTextAlignmentRight;
     [self.view addSubview:priceLabel];
     self.priceLabel = priceLabel;
     
-    // 出版时间
-    float pubdateX = authorX;
-    float pubdateY = priceH + priceY;
-    float pubdateW = authorW;
-    float pubdateH = authorH;
-    UILabel *pubdateLabel = [[UILabel alloc] initWithFrame:CGRectMake(pubdateX, pubdateY, pubdateW, pubdateH)];
-    pubdateLabel.font = [UIFont systemFontOfSize:textSize];
-    [self.view addSubview:pubdateLabel];
-    self.pubdateLabel = pubdateLabel;
-    
-    // ISBN码
-    float isbnX = authorX;
-    float isbnY = pubdateH + pubdateY;
-    float isbnW = authorW;
-    float isbnH = authorH;
-    UILabel *isbnLabel = [[UILabel alloc] initWithFrame:CGRectMake(isbnX, isbnY, isbnW, isbnH)];
-    isbnLabel.font = [UIFont systemFontOfSize:textSize];
-    [self.view addSubview:isbnLabel];
-    self.isbnLabel = isbnLabel;
+    // 版权信息按钮
+    float copyrightButtonX = authorTitleX;
+    float copyrightButtonY = priceTitleY + priceTitleH;
+    float copyrightButtonW = 60;
+    float copyrightButtonH = authorTitleH;
+    UIButton *copyrightButton = [[UIButton alloc] initWithFrame:CGRectMake(copyrightButtonX, copyrightButtonY, copyrightButtonW, copyrightButtonH)];
+    copyrightButton.titleLabel.font = [UIFont systemFontOfSize:titleSize];
+    [copyrightButton addTarget:self action:@selector(copyrightButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    copyrightButton.titleLabel.font = [UIFont systemFontOfSize:textSize];
+    copyrightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [copyrightButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [self.view addSubview:copyrightButton];
+    self.copyrightButton = copyrightButton;
     
     // 评分
-    float ratingX = authorX;
-    float ratingY = isbnH + isbnY;
-    float ratingW = authorW;
-    float ratingH = authorH;
-    UILabel *ratingLabelTitle = [[UILabel alloc] initWithFrame:CGRectMake(ratingX, ratingY, ratingW, ratingH)];
+    float ratingX = authorTitleX;
+    float ratingY = copyrightButtonH + copyrightButtonY;
+    float ratingW = authorTitleW;
+    float ratingH = authorTitleH;
+    UILabel *ratingTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(ratingX, ratingY, ratingW, ratingH)];
+    ratingTitleLabel.font = [UIFont systemFontOfSize:textSize];
+    ratingTitleLabel.textColor = [UIColor darkGrayColor];
+    [self.view addSubview:ratingTitleLabel];
+    self.ratingTitleLabel = ratingTitleLabel;
+    
     UILabel *ratingLabel = [[UILabel alloc] initWithFrame:CGRectMake(ratingX, ratingY + ratingH, ratingW, ratingH)];
-    ratingLabelTitle.font = [UIFont systemFontOfSize:textSize];
     ratingLabel.font = [UIFont systemFontOfSize:raingSize];
-    [self.view addSubview:ratingLabelTitle];
     [self.view addSubview:ratingLabel];
-    self.ratingLabelTitle = ratingLabelTitle;
     self.ratingLabel = ratingLabel;
     
     // 作者简介/内容简介／目录标题按钮
     float numOfButton = 3;
     float space = 5;
-    float buttonW = 100;
-    float buttonH = authorH;
+    float buttonW = 60;
+    float buttonH = authorTitleH;
     float buttonX = (screenWidth - ((buttonW + space) * numOfButton - space)) * 0.5;
     float buttonY = imageY + imageH + 20;
     UIButton *authorIntroButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX, buttonY, buttonW, buttonH)];
@@ -258,16 +249,6 @@
     introTextView.font = [UIFont systemFontOfSize:introSize];
     [self.view addSubview:introTextView];
     self.introTextView = introTextView;
-    
-    UIButton *buttonadd = [[UIButton alloc] initWithFrame:CGRectMake(100, 100, 100, 50)];
-    buttonadd.backgroundColor = [UIColor blueColor];
-    [buttonadd addTarget:self action:@selector(showPopupView) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:buttonadd];
-}
-
-- (void)showPopupView {
-    [self setNavigationBarStyleWithPopupView:YES];
-    self.popupView = [PopupView popupViewForCopyrightInfoWithView:self.view bookInfoDic:self.bookInfoDic];
 }
 
 /**
@@ -278,6 +259,7 @@
     NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
     self.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
     // 作者
+    self.authorTitleLabel.text = @"作者";
     NSArray *authorArray = [NSArray array];
     authorArray = self.bookInfoDic[@"author"];
     NSMutableString *authors = [[NSMutableString alloc] init];
@@ -288,36 +270,33 @@
     } else {
         authors = [authorArray lastObject];
     }
-    self.authorLabel.text = [NSString stringWithFormat:@"作者 %@", authors];
-    // 出版社
-    self.publisherLabel.text = [NSString stringWithFormat:@"出版社 %@", self.bookInfoDic[@"publisher"]];
+    self.authorLabel.text = [NSString stringWithFormat:@"%@", authors];
     // 价格
-    self.priceLabel.text = [NSString stringWithFormat:@"定价 %@", self.bookInfoDic[@"price"]];
-    // 出版日期
-    self.pubdateLabel.text = [NSString stringWithFormat:@"出版年 %@", self.bookInfoDic[@"pubdate"]];
-    // ISBN码
-    self.isbnLabel.text = [NSString stringWithFormat:@"ISBN %@", self.bookInfoDic[@"isbn13"]];
+    self.priceTitleLabel.text = @"定价";
+    self.priceLabel.text = [NSString stringWithFormat:@"%@", self.bookInfoDic[@"price"]];
+    // 版权信息
+    [self.copyrightButton setTitle:@"版权信息" forState:UIControlStateNormal];
     // 评分
-    self.ratingLabelTitle.text = @"豆瓣评分：";
+    self.ratingTitleLabel.text = @"豆瓣评分";
     self.ratingLabel.text = self.bookInfoDic[@"rating"][@"average"];
     // 作者简介／概要
     [self authorIntroButtonClick];
-    [self.authorIntroButton setTitle:@"作者简介" forState:UIControlStateNormal];
-    [self.summaryButton setTitle:@"内容简介" forState:UIControlStateNormal];
+    [self.authorIntroButton setTitle:@"作者" forState:UIControlStateNormal];
+    [self.summaryButton setTitle:@"内容" forState:UIControlStateNormal];
     [self.catalogButton setTitle:@"目录" forState:UIControlStateNormal];
 }
 
 #pragma mark - Button Click
 
 /**
- 作者简介按钮点击事件
+ 作者按钮点击事件
  */
 - (void)authorIntroButtonClick {
     [self currentButtonClick:@"author_intro" clickedButton:self.authorIntroButton notClickButton:self.summaryButton and:self.catalogButton];
 }
 
 /**
- 内容简介按钮点击事件
+ 内容按钮点击事件
  */
 - (void)summaryButtonClick {
     [self currentButtonClick:@"summary" clickedButton:self.summaryButton notClickButton:self.authorIntroButton and:self.catalogButton];
@@ -328,6 +307,14 @@
  */
 - (void)catalogButtonClick {
     [self currentButtonClick:@"catalog" clickedButton:self.catalogButton notClickButton:self.authorIntroButton and:self.summaryButton];
+}
+
+/**
+ 版权信息按钮点击事件
+ */
+- (void)copyrightButtonClick {
+    [self setNavigationBarStyle];
+    self.popupView = [PopupView popupViewForCopyrightInfoWithView:self.navigationController.view bookInfoDic:self.bookInfoDic];
 }
 
 /**

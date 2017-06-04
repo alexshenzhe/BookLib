@@ -82,7 +82,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     NSLog(@"CANCEL");
     // 恢复页面滚动
     self.tableView.scrollEnabled = YES;
-    [self.popupView killCoverAndPopupView];
+    [self.popupView hideCoverAndPopupView];
     [self setNavigationBarStyleWithPopupView:NO];
 }
 
@@ -92,7 +92,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     // 保存当前书本信息到待读
     [self.favoriteBookArray addObject:self.currentDic];
     [self saveArrayToPlist:self.favoriteBookArray withBookGroup:@"favoriteBook"];
-    [self.popupView killCoverAndPopupView];
+    [self.popupView hideCoverAndPopupView];
     [self setNavigationBarStyleWithPopupView:NO];
 }
 
@@ -271,7 +271,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
  显示弹窗
  */
 - (void)showPopupDetailViewWithBookInfoDic:(NSDictionary *)bookInfoDic {
-    self.popupView = [PopupView popupViewForDetailWithView:self.tableView bookInfoDic:bookInfoDic];
+    self.popupView = [PopupView popupViewForDetailWithTableView:self.tableView bookInfoDic:bookInfoDic];
     // 禁止tableview页面滚动
     self.tableView.scrollEnabled = NO;
     // 修改导航栏功能
