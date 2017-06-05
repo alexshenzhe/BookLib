@@ -262,7 +262,7 @@
     float dataW = popupViewW - defauleLabelW - publisherX * 2;
     UILabel *publisherTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(publisherX, publisherY, defauleLabelW, defaultLabelH)];
     publisherTextLabel.font = [UIFont systemFontOfSize:textSize];
-    publisherTextLabel.textColor = [UIColor darkGrayColor];
+    publisherTextLabel.textColor = [UIColor grayColor];
     publisherTextLabel.text = @"出版社";
     publisherTextLabel.textAlignment = NSTextAlignmentLeft;
     [self.popupView addSubview:publisherTextLabel];
@@ -278,7 +278,7 @@
     float pubdateY = defaultLabelH + publisherY;
     UILabel *pubdateTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(pubdateX, pubdateY, defauleLabelW, defaultLabelH)];
     pubdateTextLabel.font = [UIFont systemFontOfSize:textSize];
-    pubdateTextLabel.textColor = [UIColor darkGrayColor];
+    pubdateTextLabel.textColor = [UIColor grayColor];
     pubdateTextLabel.text = @"出版年";
     pubdateTextLabel.textAlignment = NSTextAlignmentLeft;
     [self.popupView addSubview:pubdateTextLabel];
@@ -294,7 +294,7 @@
     float isbnY = defaultLabelH + pubdateY;
     UILabel *isbnTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(isbnX, isbnY, defauleLabelW, defaultLabelH)];
     isbnTextLabel.font = [UIFont systemFontOfSize:textSize];
-    isbnTextLabel.textColor = [UIColor darkGrayColor];
+    isbnTextLabel.textColor = [UIColor grayColor];
     isbnTextLabel.text = @"ISBN";
     isbnTextLabel.textAlignment = NSTextAlignmentLeft;
     [self.popupView addSubview:isbnTextLabel];
@@ -310,7 +310,7 @@
     float priceY = defaultLabelH + isbnY;
     UILabel *priceTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(priceX, priceY, defauleLabelW, defaultLabelH)];
     priceTextLabel.font = [UIFont systemFontOfSize:textSize];
-    priceTextLabel.textColor = [UIColor darkGrayColor];
+    priceTextLabel.textColor = [UIColor grayColor];
     priceTextLabel.text = @"价格";
     priceTextLabel.textAlignment = NSTextAlignmentLeft;
     [self.popupView addSubview:priceTextLabel];
@@ -326,7 +326,7 @@
     float pagesY = defaultLabelH + priceY;
     UILabel *pagesTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(pagesX, pagesY, defauleLabelW, defaultLabelH)];
     pagesTextLabel.font = [UIFont systemFontOfSize:textSize];
-    pagesTextLabel.textColor = [UIColor darkGrayColor];
+    pagesTextLabel.textColor = [UIColor grayColor];
     pagesTextLabel.text = @"页数";
     pagesTextLabel.textAlignment = NSTextAlignmentLeft;
     [self.popupView addSubview:pagesTextLabel];
@@ -347,7 +347,8 @@
     closeButton.titleLabel.font = [UIFont systemFontOfSize:textSize];
     [closeButton addTarget:self action:@selector(hideCoverAndPopupView) forControlEvents:UIControlEventTouchUpInside];
     closeButton.titleLabel.font = [UIFont systemFontOfSize:textSize];
-    [closeButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    [closeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [closeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
     [self.popupView addSubview:closeButton];
 }
 
