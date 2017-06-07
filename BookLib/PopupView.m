@@ -251,6 +251,8 @@
     float titleY = 30;
     float titleW = popupViewW;
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleX, titleY, titleW, defaultLabelH)];
+    // 字体加粗
+    [titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:17]];
     titleLabel.text = @"版权信息";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.popupView addSubview:titleLabel];

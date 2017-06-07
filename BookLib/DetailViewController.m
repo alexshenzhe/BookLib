@@ -10,7 +10,7 @@
 #import "MBProgressHUD.h"
 #import "PopupView.h"
 
-@interface DetailViewController ()
+@interface DetailViewController ()<UITabBarDelegate>
 
 @property (nonatomic, weak) UIImageView *bookImageView; // 封面
 @property (nonatomic, weak) UILabel *authorTitleLabel; // 作者标题
@@ -25,6 +25,7 @@
 @property (nonatomic, weak) UIButton *authorIntroButton; // 作者简介按钮
 @property (nonatomic, weak) UIButton *catalogButton; // 目录按钮
 @property (nonatomic, weak) UITextView *introTextView; // 简介显示文本
+//@property (nonatomic, weak) UITabBar *introTabBar; // 标签栏
 @property (nonatomic, strong) PopupView *popupView;
 @end
 
@@ -131,6 +132,7 @@
     float introSize = 15.0;
     float titleSize = 18.0;
     float screenWidth = self.view.bounds.size.width;
+    float screenHeight = self.view.bounds.size.height;
 
     // 封面
     float imageX = 20;
@@ -219,42 +221,30 @@
     [self.view addSubview:ratingLabel];
     self.ratingLabel = ratingLabel;
     
-    // 作者简介/内容简介／目录标题
-    UIButton *authorIntroButton = [[UIButton alloc] init];
-    UIButton *summaryButton = [[UIButton alloc] init];
-    UIButton *catalogButton = [[UIButton alloc] init];
-    NSArray *buttonArray = [[NSArray alloc] initWithObjects:summaryButton, authorIntroButton, catalogButton, nil];
-    float numOfButton = buttonArray.count;
-    float space = 0;
-    float buttonW = 70;
-    float buttonH = 40;
-    float buttonX = (screenWidth - ((buttonW + space) * numOfButton - space)) * 0.5;
-    float buttonY = imageY + imageH + 20;
-    for (int i = 0; i < buttonArray.count; i ++) {
-        UIButton *button = buttonArray[i];
-        button.frame = CGRectMake(buttonX + (buttonW + space) * i, buttonY, buttonW, buttonH);
-        button.titleLabel.font = [UIFont systemFontOfSize:titleSize];
-    }
-    [summaryButton addTarget:self action:@selector(summaryButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [authorIntroButton addTarget:self action:@selector(authorIntroButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [catalogButton addTarget:self action:@selector(catalogButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:summaryButton];
-    [self.view addSubview:authorIntroButton];
-    [self.view addSubview:catalogButton];
-    self.summaryButton = summaryButton;
-    self.authorIntroButton = authorIntroButton;
-    self.catalogButton = catalogButton;
-    
+    // 作者/内容／目录
     float authorIntroX = imageX;
-    float authorIntroY = buttonY + buttonH + 10;
-    float authorIntroW = self.view.bounds.size.width - imageX * 2;
-    float authorIntroH = self.view.bounds.size.height - authorIntroY - imageX;
+    float authorIntroY = imageY + imageH + 20;
+    float authorIntroW = screenWidth - imageX * 2;
+    float authorIntroH = screenHeight - authorIntroY - 49;
     UITextView *introTextView = [[UITextView alloc] initWithFrame:CGRectMake(authorIntroX, authorIntroY, authorIntroW, authorIntroH)];
     introTextView.editable = NO;
     introTextView.showsVerticalScrollIndicator = NO;
     introTextView.font = [UIFont systemFontOfSize:introSize];
     [self.view addSubview:introTextView];
     self.introTextView = introTextView;
+    
+    // 底部标签栏
+    UITabBar *introTabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, screenHeight - 49, screenWidth, 49)];
+    UITabBarItem *summaryItem = [[UITabBarItem alloc] initWithTitle:@"内容" image:[UIImage imageNamed:@"summaryButton"] tag:0];
+    UITabBarItem *authorItem = [[UITabBarItem alloc] initWithTitle:@"作者" image:[UIImage imageNamed:@"authorButton"] tag:1];
+    UITabBarItem *catalogItem = [[UITabBarItem alloc] initWithTitle:@"目录" image:[UIImage imageNamed:@"catalogButton"] tag:2];
+    NSArray *itemsArray = [[NSArray alloc] initWithObjects:summaryItem, authorItem, catalogItem, nil];
+    [introTabBar setItems:itemsArray];
+    introTabBar.delegate = self;
+    [self.view addSubview:introTabBar];
+    // 默认点击
+    introTabBar.selectedItem = summaryItem;
+    [self summaryButtonClick];
 }
 
 /**
@@ -286,14 +276,25 @@
     // 评分
     self.ratingTitleLabel.text = @"豆瓣评分";
     self.ratingLabel.text = self.bookInfoDic[@"rating"][@"average"];
-    // 作者简介／概要
-    [self summaryButtonClick];
+    // 作者简介／概要/目录
     [self.summaryButton setTitle:@"内容" forState:UIControlStateNormal];
     [self.authorIntroButton setTitle:@"作者" forState:UIControlStateNormal];
     [self.catalogButton setTitle:@"目录" forState:UIControlStateNormal];
 }
 
-#pragma mark - Button Click
+# pragma mark - UITabBarDelegate
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    if (item.tag == 0) {
+        [self summaryButtonClick];
+    } else if (item.tag == 1) {
+        [self authorIntroButtonClick];
+    } else if (item.tag == 2) {
+        [self catalogButtonClick];
+    }
+}
+
+# pragma mark - Button Click
 
 /**
  内容按钮点击事件
@@ -331,18 +332,6 @@
  通用点击事件
  */
 - (void)currentButtonClick:(NSString *)buttonName clickedButton:(UIButton *)clickedButton notClickButton:(NSArray *)notClickButton {
-    // 被点击的按钮
-    clickedButton.userInteractionEnabled = NO;
-    clickedButton.selected = NO;
-    clickedButton.backgroundColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1];
-    [clickedButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    // 未点击的按钮
-    for (UIButton *button in notClickButton) {
-        button.userInteractionEnabled = YES;
-        button.selected = YES;
-        button.backgroundColor = [UIColor blackColor];
-        [button setTitleColor:[UIColor colorWithRed:169/255.0 green:169/255.0 blue:169/255.0 alpha:1] forState:UIControlStateNormal];
-    }
     // 设置相应显示的内容
     NSString *introString = self.bookInfoDic[buttonName];
     if (introString.length == 0) {

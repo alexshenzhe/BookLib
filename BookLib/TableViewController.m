@@ -40,7 +40,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    self.tableView.showsVerticalScrollIndicator = NO;
     [self setNavigationBarStyleWithPopupView:NO];
 }
 
