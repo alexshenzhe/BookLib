@@ -11,15 +11,16 @@
 @interface PopupView : UIView
 
 /**
- 创建Detail PopupView
+  创建Detail PopupView
  */
 - (instancetype)initPopupViewForDetailWithTableView:(UITableView *)parentTableView bookInfoDic:(NSDictionary *)bookInfoDic;
 + (instancetype)popupViewForDetailWithTableView:(UITableView *)parentTableView bookInfoDic:(NSDictionary *)bookInfoDic;
 
 - (instancetype)initPopupViewForCopyrightInfoWithView:(UIView *)view bookInfoDic:(NSDictionary *)bookInfoDic;
 + (instancetype)popupViewForCopyrightInfoWithView:(UIView *)view bookInfoDic:(NSDictionary *)bookInfoDic;
+
 /**
- 清除阴影及popupView
+  清除阴影及popupView
  */
 - (void)hideCoverAndPopupView;
 

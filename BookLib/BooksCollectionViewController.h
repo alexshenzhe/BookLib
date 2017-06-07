@@ -12,6 +12,9 @@
 @protocol BooksCollectionViewControllerDelegate <NSObject>
 
 @optional
+/**
+  代理方法：被点击后传递相应书本的index以及所在组，书本信息
+ */
 - (void)booksConllectionViewController:(BooksCollectionViewController *)booksConllectionViewController didSelectAtItemIndexPath:(NSIndexPath *)indexPath withTableViewSection:(NSInteger)section withData:(NSDictionary *)dic;
 
 @end

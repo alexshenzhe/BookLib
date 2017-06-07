@@ -33,7 +33,7 @@ static NSString *const reusecollectionCell = @"collectionCell";
 }
 
 /**
- 重写init方法，设置layout
+  重写init方法，设置layout
  */
 - (instancetype)init {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -48,7 +48,7 @@ static NSString *const reusecollectionCell = @"collectionCell";
 }
 
 /**
- 判断第几组tableViewCell
+  判断第几组tableViewCell
  */
 - (NSMutableArray *)whichSectionForBooksArray {
     NSMutableArray *array = [NSMutableArray array];
@@ -97,7 +97,7 @@ static NSString *const reusecollectionCell = @"collectionCell";
 # pragma mark - UICollectionViewDelegate
 
 /**
- 点击事件处理
+  点击事件处理
  */
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *dic = [NSDictionary dictionary];

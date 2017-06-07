@@ -13,6 +13,9 @@
 @protocol CameraCaptureControllerDelegate <NSObject>
 
 @optional
+/**
+  代理方法：传递扫描结果
+ */
 - (void)cameraCaptureSuccess:(CameraCaptureController *)cameraCaptureController values:(NSString *)value;
 
 @end
@@ -22,7 +25,7 @@
 @property (nonatomic, weak) id<CameraCaptureControllerDelegate> delegate;
 
 /**
- 开始获取条形码
+  开始获取条形码
  */
 - (void)cameraStartCapture;
 

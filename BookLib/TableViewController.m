@@ -50,7 +50,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 定义tableView样式
+  定义tableView样式
  */
 - (instancetype)initWithStyle:(UITableViewStyle)style {
     return [super initWithStyle:UITableViewStyleGrouped];
@@ -59,7 +59,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 #pragma mark - NavigatingBar Style
 
 /**
- 设置导航栏样式
+  设置导航栏样式
  */
 - (void)setNavigationBarStyleWithPopupView:(BOOL)isPopupView {
     if (!isPopupView) {
@@ -97,7 +97,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 显示选择提示框
+  显示选择提示框
  */
 - (void)addBookInfo {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -143,7 +143,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 #pragma mark - Current Method
 
 /**
- 扫描条形码
+  扫描条形码
  */
 - (void)captureIsbnByCamera {
     CameraCaptureController *cameraCapture = [[CameraCaptureController alloc] init];
@@ -154,7 +154,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 查找书本信息
+  查找书本信息
  */
 - (void)searchBookInfoWithIsbn:(NSString *)isbnString {
     if (![self checkNetworkStatus]) {
@@ -167,7 +167,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 检查当前网络是否存在
+  检查当前网络是否存在
  */
 - (BOOL)checkNetworkStatus {
     BOOL isExistenceNetwork = YES;
@@ -191,7 +191,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 保存到plist文件
+  保存到plist文件
  */
 - (void)saveArrayToPlist:(NSMutableArray *)array withBookGroup:(NSString *)bookGroup {
     NSString *fileName = [NSString stringWithFormat:@"Documents/%@.plist", bookGroup];
@@ -206,7 +206,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 刷新页面数据
+  刷新页面数据
  */
 - (void)updateViewData {
     [self.favoriteCollectionViewController.collectionView reloadData];
@@ -214,7 +214,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 显示错误文字弹出框
+  显示错误文字弹出框
  */
 - (void)errorHUDWithString:(NSString *)string {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -252,7 +252,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 通用懒加载
+  通用懒加载
  */
 - (NSMutableArray *)loadingArray:(NSMutableArray *)loadArray withPlistName:(NSString *)plistName {
     NSString *plistPath = [NSString stringWithFormat:@"Documents/%@", plistName];
@@ -268,7 +268,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 # pragma mark - Show PopupView
 
 /**
- 显示弹窗
+  显示弹窗
  */
 - (void)showPopupDetailViewWithBookInfoDic:(NSDictionary *)bookInfoDic {
     self.popupView = [PopupView popupViewForDetailWithTableView:self.tableView bookInfoDic:bookInfoDic];
@@ -355,21 +355,21 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 #pragma mark - TableViewDataSource
 
 /**
- 组
+  组
  */
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
 }
 
 /**
- 行
+  行
  */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }
 
 /**
- 行数据
+  行数据
  */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BooksCollectionViewController *collectionViewController = [[BooksCollectionViewController alloc] init];
@@ -392,21 +392,21 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- 行高
+  行高
  */
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 314;
 }
 
 /**
- 头标题高
+  头标题高
  */
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 30;
 }
 
 /**
- 头标题
+  头标题
  */
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *headerString = [NSString string];

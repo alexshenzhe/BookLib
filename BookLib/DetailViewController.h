@@ -12,6 +12,9 @@
 @protocol DetailViewControllerDelegate <NSObject>
 
 @optional
+/**
+  代理方法：传递书本所在组及列，以及改变之后的组
+ */
 - (void)DetailViewControllerDelegate:(DetailViewController *)detailViewController withIndexPath:(NSIndexPath *)indexPath andTableViewCellSection:(NSInteger)section fromBookGroup:(NSString *)bookGroupFrom toBookGroup:(NSString *)bookGroupTo;
 
 @end

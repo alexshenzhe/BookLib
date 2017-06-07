@@ -31,7 +31,7 @@
 # pragma mark - Cover View
 
 /**
- 创建阴影
+  创建阴影
  */
 - (void)showCoverAddToView:(UIView *)view orTableView:(UITableView *)tableView alpha:(float)alpha {
     UIView *coverView = [[UIView alloc] init];
@@ -55,7 +55,7 @@
 }
 
 /**
- 清除阴影
+  清除阴影
  */
 - (void)hideCoverAndPopupView {
     [UIView animateWithDuration:0.5 animations:^{
@@ -72,7 +72,7 @@
 # pragma mark - Detail Popup View
 
 /**
- 创建Detail PopupView
+  创建Detail PopupView
  */
 - (instancetype)initPopupViewForDetailWithTableView:(UITableView *)parentTableView bookInfoDic:(NSDictionary *)bookInfoDic {
     self = [super init];
@@ -91,7 +91,7 @@
 }
 
 /**
- 创建Detail PopupView信息页frame
+  创建Detail PopupView信息页frame
  */
 - (void)showPopupViewForDetailWithTableView:(UITableView *)parentTableView {
     float textSize = 15.0;
@@ -174,7 +174,7 @@
 }
 
 /**
- 设置Detail PopupView数据
+  设置Detail PopupView数据
  */
 - (void)showPopupViewForDetailData {
     // 封面
@@ -203,7 +203,7 @@
 # pragma mark - Copyright Info Popup View
 
 /**
- 创建版权信息PopupView
+  创建版权信息PopupView
  */
 - (instancetype)initPopupViewForCopyrightInfoWithView:(UIView *)parentView bookInfoDic:(NSDictionary *)bookInfoDic {
     self = [super init];
@@ -221,7 +221,7 @@
 }
 
 /**
- 创建版权页 PopupView的frame
+  创建版权页 PopupView的frame
  */
 - (void)showPopupViewForCopyrightInfoWithView:(UIView *)parentView {
     UIView *popupView = [[UIView alloc] init];
@@ -355,7 +355,7 @@
 }
 
 /**
- 设置版权页Data
+  设置版权页Data
  */
 - (void)showPopupViewForCopyrightInfoData {
     // 出版社

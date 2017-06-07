@@ -30,7 +30,7 @@
 }
 
 /**
- 扫描条形码方法
+  扫描条形码方法
  */
 - (void)cameraStartCapture {
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -70,7 +70,7 @@
 }
 
 /**
- 创建扫描区域阴影
+  创建扫描区域阴影
 */
 - (void)cameraCaptureArea {
     // 阴影区域
@@ -98,7 +98,7 @@
         if ([self.delegate respondsToSelector:@selector(cameraCaptureSuccess:values:)]) {
             [self.delegate cameraCaptureSuccess:self values:metadataObject.stringValue];
         }
-        //输出扫描字符串
+        // 输出扫描字符串
         NSLog(@"%@",metadataObject.stringValue);
     }
 }
