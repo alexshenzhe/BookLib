@@ -53,7 +53,6 @@
     if ([self.delegate respondsToSelector:@selector(JSONAnalysisSuccess:dictionary:)]) {
         [self.delegate JSONAnalysisSuccess:self dictionary:dic];
     }
-    NSLog(@"JSON解析成功，书名：%@", dic[@"title"]);
 }
 
 /**

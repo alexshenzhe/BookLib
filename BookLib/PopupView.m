@@ -78,7 +78,6 @@
     self = [super init];
     if (self) {
         self.bookInfoDic = bookInfoDic;
-//        [self showCoverWithTableView:parentTableView alpha:0.7];
         [self showCoverAddToView:nil orTableView:parentTableView alpha:0.7];
         [self showPopupViewForDetailWithTableView:parentTableView];
         [self showPopupViewForDetailData];
@@ -178,8 +177,11 @@
  */
 - (void)showPopupViewForDetailData {
     // 封面
-    NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
-    self.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
+        self.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+    });
+    
     // 书名
     self.bookTitleLabel.text = self.bookInfoDic[@"title"];
     // 作者

@@ -251,8 +251,11 @@
  */
 - (void)subviewsData {
     // 封面
-    NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
-    self.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
+        self.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+    });
+    
     // 作者
     self.authorTitleLabel.text = @"作者";
     NSArray *authorArray = [NSArray array];

@@ -86,11 +86,14 @@ static NSString *const reusecollectionCell = @"collectionCell";
     NSMutableArray *array = [NSMutableArray array];
     array = [self whichSectionForBooksArray];
     dic = array[indexPath.row];
+    // 异步加载图片
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"title:%@", dic[@"title"]);
+        NSURL *imageURL = [NSURL URLWithString:dic[@"images"][@"large"]];
+        cell.bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+        cell.bookName = dic[@"title"];
+    });
     
-    NSLog(@"title:%@", dic[@"title"]);
-    NSURL *imageURL = [NSURL URLWithString:dic[@"images"][@"large"]];
-    cell.bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-    cell.bookName = dic[@"title"];
     return cell;
 }
 
@@ -109,37 +112,5 @@ static NSString *const reusecollectionCell = @"collectionCell";
     }
     return YES;
 }
-
-/*
- // Uncomment this method to specify if the specified item should be highlighted during tracking
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
- }
- */
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

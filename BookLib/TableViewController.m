@@ -42,6 +42,10 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     [super viewDidLoad];
     self.tableView.showsVerticalScrollIndicator = NO;
     [self setNavigationBarStyleWithPopupView:NO];
+    if (![self checkNetworkStatus]) {
+        [self showMessageHUDWithString:@"网络连接失败，部分内容无法显示！"];
+        return;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,7 +83,6 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 - (void)cancelToAddBook {
-    NSLog(@"CANCEL");
     // 恢复页面滚动
     self.tableView.scrollEnabled = YES;
     [self.popupView hideCoverAndPopupView];
@@ -87,7 +90,6 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 - (void)sureToAddBook {
-    NSLog(@"SURE");
     self.tableView.scrollEnabled = YES;
     // 保存当前书本信息到待读
     [self.favoriteBookArray addObject:self.currentDic];
@@ -103,7 +105,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     // 手动输入
     UIAlertAction *inputAction = [UIAlertAction actionWithTitle:@"输入" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UIAlertController *inputAlertController = [UIAlertController alertControllerWithTitle:@"输入" message:@"请正确输入书本背后条形码数字" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *inputAlertController = [UIAlertController alertControllerWithTitle:@"输入条形码" message:@"请正确输入书本背后13位条形码数字" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *inputAction = [UIAlertAction actionWithTitle:@"搜索" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             UITextField *textField = inputAlertController.textFields.firstObject;
             // loading动画
@@ -123,7 +125,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         [inputAlertController addAction:inputAction];
         [inputAlertController addAction:cancelAction];
         [inputAlertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            textField.placeholder = @"请输入条形码";
+            textField.placeholder = @"请输入13位条形码";
         }];
         [self presentViewController:inputAlertController animated:YES completion:nil];
     }];
@@ -158,7 +160,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
  */
 - (void)searchBookInfoWithIsbn:(NSString *)isbnString {
     if (![self checkNetworkStatus]) {
-        [self errorHUDWithString:@"网络不可用，请检查网络连接！"];
+        [self showMessageHUDWithString:@"网络连接失败，请检查网络！"];
         return;
     }
     NSString *JSONString = [NSString stringWithFormat:@"https://api.douban.com/v2/book/isbn/:%@", isbnString];
@@ -183,7 +185,6 @@ static NSString *const reusetableViewCell = @"tableViewCell";
             isExistenceNetwork = YES;
             break;
     }
-    
     if (!isExistenceNetwork) {
         return NO;
     }
@@ -199,7 +200,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     NSLog(@"%@", path);
     BOOL success = [array writeToFile:path atomically:YES];
     if (! success) {
-        [self errorHUDWithString:@"保存失败！"];
+        [self showMessageHUDWithString:@"保存失败！"];
         return;
     }
     [self updateViewData];
@@ -216,7 +217,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 /**
   显示错误文字弹出框
  */
-- (void)errorHUDWithString:(NSString *)string {
+- (void)showMessageHUDWithString:(NSString *)string {
     dispatch_async(dispatch_get_main_queue(), ^{
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
         // 设置显示模式
@@ -323,12 +324,11 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 - (void)booksConllectionViewController:(BooksCollectionViewController *)booksConllectionViewController didSelectAtItemIndexPath:(NSIndexPath *)indexPath withTableViewSection:(NSInteger)section withData:(NSDictionary *)dic {
     self.detailViewController = [[DetailViewController alloc] init];
     self.detailViewController.delegate = self;
-    // 传递组信息
+    // 传递组信息／书本索引／书本信息
     self.detailViewController.tableViewCellSection = section;
-    // 传递书本索引
     self.detailViewController.indexPath = indexPath;
-    // 传递书本信息
     self.detailViewController.bookInfoDic = dic;
+    
     [self.navigationController pushViewController:self.detailViewController animated:YES];
 }
 
@@ -345,7 +345,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     NSString *errorCode = dic[@"code"];
     if (errorCode) {
         NSString *errorString = [NSString stringWithFormat:@"查询失败，错误代码为%@", errorCode];
-        [self errorHUDWithString:errorString];
+        [self showMessageHUDWithString:errorString];
         return;
     }
     self.currentDic = dic;
@@ -410,58 +410,18 @@ static NSString *const reusetableViewCell = @"tableViewCell";
  */
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *headerString = [NSString string];
-    if (section == 0) {
-        headerString = @"待读";
-    } else if (section == 1) {
-        headerString = @"在读";
-    } else if (section == 2){
-        headerString = @"已读";
+    switch (section) {
+        case 0:
+            headerString = @"待读";
+            break;
+        case 1:
+            headerString = @"在读";
+            break;
+        case 2:
+            headerString = @"已读";
+            break;
     }
     return headerString;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
