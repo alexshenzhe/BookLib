@@ -44,7 +44,7 @@
 }
 
 /**
-  显示错误文字弹出框
+ * 显示错误文字弹出框
  */
 - (void)errorHUDWithString:(NSString *)string {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -60,7 +60,7 @@
 #pragma mark - NavigationBar Style
 
 /**
-  设置导航栏内容
+ * 设置导航栏内容
  */
 - (void)setNavigationBarStyle {
     UIBarButtonItem *changeBookGroupButton = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editBookGroup)];
@@ -71,7 +71,7 @@
 }
 
 /**
-  编辑
+ * 编辑
  */
 - (void)editBookGroup {
     // 默认分组
@@ -123,7 +123,7 @@
 #pragma mark - Subview Frame & Data
 
 /**
-  设置子控件的frame
+ * 设置子控件的frame
  */
 - (void)subviewsFrame {
     float textSize = 13.0;
@@ -247,13 +247,15 @@
 }
 
 /**
-  设置子控件数据
+ * 设置子控件数据
  */
 - (void)subviewsData {
     // 封面
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
-        self.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.bookImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+        });
     });
     
     // 作者
@@ -299,7 +301,7 @@
 # pragma mark - Button Click
 
 /**
-  内容按钮点击事件
+ * 内容按钮点击事件
  */
 - (void)summaryButtonClick {
     NSArray *button = [[NSArray alloc] initWithObjects:self.authorIntroButton, self.catalogButton, nil];
@@ -307,7 +309,7 @@
 }
 
 /**
-  作者按钮点击事件
+ * 作者按钮点击事件
  */
 - (void)authorIntroButtonClick {
     NSArray *button = [[NSArray alloc] initWithObjects:self.summaryButton, self.catalogButton, nil];
@@ -315,7 +317,7 @@
 }
 
 /**
-  目录按钮点击事件
+ * 目录按钮点击事件
  */
 - (void)catalogButtonClick {
     NSArray *button = [[NSArray alloc] initWithObjects:self.authorIntroButton, self.summaryButton, nil];
@@ -323,7 +325,7 @@
 }
 
 /**
-  版权信息按钮点击事件
+ * 版权信息按钮点击事件
  */
 - (void)copyrightButtonClick {
     [self setNavigationBarStyle];
@@ -331,7 +333,7 @@
 }
 
 /**
-  通用点击事件
+ * 通用点击事件
  */
 - (void)currentButtonClick:(NSString *)buttonName clickedButton:(UIButton *)clickedButton notClickButton:(NSArray *)notClickButton {
     // 设置相应显示的内容

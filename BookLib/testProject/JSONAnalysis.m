@@ -36,7 +36,7 @@
 #pragma mark - NSURLSessionDataDelegate
 
 /**
-  接收到服务器的响应
+ * 接收到服务器的响应
  */
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler {
     // 允许处理服务器的响应，才会继续接收服务器返回的数据
@@ -44,7 +44,7 @@
 }
 
 /**
-  接收到服务器的数据
+ * 接收到服务器的数据
  */
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
     NSError *error = nil;
@@ -56,7 +56,7 @@
 }
 
 /**
-  请求成功或者失败的处理
+ * 请求成功或者失败的处理
  */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     // 暂时不做处理

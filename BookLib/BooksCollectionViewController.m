@@ -33,7 +33,7 @@ static NSString *const reusecollectionCell = @"collectionCell";
 }
 
 /**
-  重写init方法，设置layout
+ * 重写init方法，设置layout
  */
 - (instancetype)init {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -48,7 +48,7 @@ static NSString *const reusecollectionCell = @"collectionCell";
 }
 
 /**
-  判断第几组tableViewCell
+ * 判断第几组tableViewCell
  */
 - (NSMutableArray *)whichSectionForBooksArray {
     NSMutableArray *array = [NSMutableArray array];
@@ -76,6 +76,10 @@ static NSString *const reusecollectionCell = @"collectionCell";
     return [self whichSectionForBooksArray].count;
 }
 
+
+/**
+ * 设置collectionView内容
+ */
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     BooksCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reusecollectionCell forIndexPath:indexPath];
     if (cell == nil) {
@@ -87,12 +91,16 @@ static NSString *const reusecollectionCell = @"collectionCell";
     array = [self whichSectionForBooksArray];
     dic = array[indexPath.row];
     // 异步加载图片
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"title:%@", dic[@"title"]);
         NSURL *imageURL = [NSURL URLWithString:dic[@"images"][@"large"]];
-        cell.bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-        cell.bookName = dic[@"title"];
+        // 主线程更新图片
+        dispatch_async(dispatch_get_main_queue(), ^{
+            cell.bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+            cell.bookName = dic[@"title"];
+        });
     });
+    
     
     return cell;
 }
@@ -100,7 +108,7 @@ static NSString *const reusecollectionCell = @"collectionCell";
 # pragma mark - UICollectionViewDelegate
 
 /**
-  点击事件处理
+ * 点击事件处理
  */
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *dic = [NSDictionary dictionary];

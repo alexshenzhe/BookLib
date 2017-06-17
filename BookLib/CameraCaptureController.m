@@ -30,7 +30,7 @@
 }
 
 /**
-  扫描条形码方法
+ * 扫描条形码方法
  */
 - (void)cameraStartCapture {
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -70,8 +70,8 @@
 }
 
 /**
-  创建扫描区域阴影
-*/
+ * 创建扫描区域阴影
+ */
 - (void)cameraCaptureArea {
     // 阴影区域
     UIView *coverView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, SCREENWIDTH, SCREENHEIGHT - 64)];
