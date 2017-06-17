@@ -94,9 +94,10 @@ static NSString *const reusecollectionCell = @"collectionCell";
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"title:%@", dic[@"title"]);
         NSURL *imageURL = [NSURL URLWithString:dic[@"images"][@"large"]];
+        UIImage *bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
         // 主线程更新图片
         dispatch_async(dispatch_get_main_queue(), ^{
-            cell.bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+            cell.bookImage = bookImage;
             cell.bookName = dic[@"title"];
         });
     });
