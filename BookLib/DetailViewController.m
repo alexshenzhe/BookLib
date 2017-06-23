@@ -139,7 +139,6 @@
     float imageW = (screenWidth - 2 * imageX) * 0.5 - imageX;
     float imageH = imageW * 1.4;
     UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
-    bookImageView.backgroundColor = [UIColor purpleColor];
     // 添加四个边阴影
     bookImageView.layer.shadowColor = [UIColor blackColor].CGColor;
     bookImageView.layer.shadowOffset = CGSizeMake(0, 0); // 阴影偏移

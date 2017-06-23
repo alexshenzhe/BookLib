@@ -92,7 +92,6 @@ static NSString *const reusecollectionCell = @"collectionCell";
     dic = array[indexPath.row];
     // 异步加载图片
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSLog(@"title:%@", dic[@"title"]);
         NSURL *imageURL = [NSURL URLWithString:dic[@"images"][@"large"]];
         UIImage *bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
         // 主线程更新图片

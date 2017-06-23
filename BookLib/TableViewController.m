@@ -374,15 +374,19 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BooksCollectionViewController *collectionViewController = [[BooksCollectionViewController alloc] init];
     // 为不同组添加内容
-    if (indexPath.section == 0) {
-        self.favoriteCollectionViewController = collectionViewController;
-        collectionViewController.favoriteBookArray = self.favoriteBookArray;
-    } else if (indexPath.section == 1) {
-        self.readingCollectionViewController = collectionViewController;
-        collectionViewController.readingBookArray = self.readingBookArray;
-    } else if (indexPath.section == 2) {
-        self.haveReadCollectionViewController = collectionViewController;
-        collectionViewController.haveReadBookArray = self.haveReadBookArray;
+    switch (indexPath.section) {
+        case 0:
+            self.favoriteCollectionViewController = collectionViewController;
+            collectionViewController.favoriteBookArray = self.favoriteBookArray;
+            break;
+        case 1:
+            self.readingCollectionViewController = collectionViewController;
+            collectionViewController.readingBookArray = self.readingBookArray;
+            break;
+        case 2:
+            self.haveReadCollectionViewController = collectionViewController;
+            collectionViewController.haveReadBookArray = self.haveReadBookArray;
+            break;
     }
     self.tableViewCell = [[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reusetableViewCell collectionViewController:collectionViewController];
     collectionViewController.delegate = self;

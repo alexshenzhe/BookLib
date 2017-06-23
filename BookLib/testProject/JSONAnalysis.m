@@ -20,7 +20,7 @@
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         dispatch_async(queue, ^{
             // 解析
-            NSURLRequest *request = [NSURLRequest requestWithURL:url];
+            NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
             NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:(id<NSURLSessionDataDelegate>)self delegateQueue:[NSOperationQueue mainQueue]];
             NSURLSessionDataTask *task = [session dataTaskWithRequest:request];
             [task resume];
