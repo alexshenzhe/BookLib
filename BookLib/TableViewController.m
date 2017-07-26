@@ -17,6 +17,7 @@
 #import "DetailViewController.h"
 #import "PopupView.h"
 #import "Reachability.h"
+//#import "UIImageView+WebCache.h"
 
 @interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate, BooksCollectionViewControllerDelegate, DetailViewControllerDelegate, UICollectionViewDelegate>
 
@@ -69,8 +70,15 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     if (!isPopupView) {
         // 默认时导航栏
         UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                                   target:self action:@selector(addBookInfo)];
+                                                                                   target:self
+                                                                                   action:@selector(addBookInfo)];
         self.navigationItem.rightBarButtonItem = addButton;
+        
+//        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"清除缓存"
+//                                                                       style:UIBarButtonItemStylePlain
+//                                                                      target:self
+//                                                                      action:@selector(clickCache)];
+//        self.navigationItem.leftBarButtonItem = cancelButton;
         self.navigationItem.leftBarButtonItem = nil;
         self.title = @"书架";
     } else {
@@ -88,6 +96,11 @@ static NSString *const reusetableViewCell = @"tableViewCell";
         self.title = @"简介";
     }
 }
+
+//- (void)clickCache {
+//    [[[SDWebImageManager sharedManager] imageCache] clearMemory];
+//    [[NSURLCache sharedURLCache] removeAllCachedResponses];
+//}
 
 - (void)cancelToAddBook {
     // 恢复页面滚动

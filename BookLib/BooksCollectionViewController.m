@@ -90,18 +90,10 @@ static NSString *const reusecollectionCell = @"collectionCell";
     NSMutableArray *array = [NSMutableArray array];
     array = [self whichSectionForBooksArray];
     dic = array[indexPath.row];
-    // 异步加载图片
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURL *imageURL = [NSURL URLWithString:dic[@"images"][@"large"]];
-        UIImage *bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-        // 主线程更新图片
-        dispatch_async(dispatch_get_main_queue(), ^{
-            cell.bookImage = bookImage;
-            cell.bookName = dic[@"title"];
-        });
-    });
-    
-    
+    // 加载封面图片
+    NSURL *imageURL = [NSURL URLWithString:dic[@"images"][@"large"]];
+    cell.imageURL = imageURL;
+    cell.bookName = dic[@"title"];
     return cell;
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "BooksCollectionViewCell.h"
+#import "UIImageView+WebCache.h"
 
 @interface BooksCollectionViewCell ()
 
@@ -49,14 +50,20 @@
 
 # pragma mark - 重写set方法
 
-- (void)setBookImage:(UIImage *)bookImage {
-    _bookImage = bookImage;
-    self.bookImageView.image = bookImage;
+- (void)setImageURL:(NSURL *)imageURL {
+    _imageURL = imageURL;
+    // 异步加载封面图片
+    [self.bookImageView sd_setImageWithURL:imageURL placeholderImage:nil options:SDWebImageRefreshCached];
 }
 
 - (void)setBookName:(NSString *)bookName {
     _bookName = bookName;
     self.bookNameLabel.text = bookName;
 }
+
+//- (void)setBookImage:(UIImage *)bookImage {
+//    _bookImage = bookImage;
+//    self.bookImageView.image = bookImage;
+//}
 
 @end

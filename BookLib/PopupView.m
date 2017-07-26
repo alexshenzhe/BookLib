@@ -7,6 +7,7 @@
 //
 
 #import "PopupView.h"
+#import "UIImageView+WebCache.h"
 
 @interface PopupView ()
 
@@ -132,13 +133,8 @@
  */
 - (void)showPopupViewForDetailData {
     // 封面
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
-        UIImage *bookImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.bookImageView.image = bookImage;
-        });
-    });
+    NSURL *imageURL = [NSURL URLWithString:self.bookInfoDic[@"images"][@"large"]];
+    [self.bookImageView sd_setImageWithURL:imageURL placeholderImage:nil options:SDWebImageRefreshCached];
     
     // 书名
     self.bookTitleLabel.text = self.bookInfoDic[@"title"];
