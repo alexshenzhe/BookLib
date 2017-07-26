@@ -63,19 +63,26 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 #pragma mark - NavigatingBar Style
 
 /**
-  设置导航栏样式
+ * 设置导航栏样式
  */
 - (void)setNavigationBarStyleWithPopupView:(BOOL)isPopupView {
     if (!isPopupView) {
         // 默认时导航栏
-        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBookInfo)];
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                                   target:self action:@selector(addBookInfo)];
         self.navigationItem.rightBarButtonItem = addButton;
         self.navigationItem.leftBarButtonItem = nil;
         self.title = @"书架";
     } else {
         // popupView 时导航栏
-        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelToAddBook)];
-        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(sureToAddBook)];
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消"
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:self
+                                                                        action:@selector(cancelToAddBook)];
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"添加"
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self
+                                                                      action:@selector(sureToAddBook)];
         self.navigationItem.leftBarButtonItem = cancelButton;
         self.navigationItem.rightBarButtonItem = doneButton;
         self.title = @"简介";

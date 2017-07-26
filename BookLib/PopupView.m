@@ -10,17 +10,17 @@
 
 @interface PopupView ()
 
-@property (nonatomic, weak) UIImageView *bookImageView; // 封面
-@property (nonatomic, weak) UILabel *bookTitleLabel; // 书名
-@property (nonatomic, weak) UILabel *authorLabel; // 作者
-@property (nonatomic, weak) UILabel *publisherLabel; // 出版社
+@property (nonatomic, weak) UIImageView *bookImageView;  // 封面
+@property (nonatomic, weak) UILabel *bookTitleLabel;     // 书名
+@property (nonatomic, weak) UILabel *authorLabel;        // 作者
+@property (nonatomic, weak) UILabel *publisherLabel;     // 出版社
 @property (nonatomic, weak) UITextView *summaryTextView; // 概要
-@property (nonatomic, weak) UILabel *pubdateLabel; // 出版年
-@property (nonatomic, weak) UILabel *isbnLabel; // ISBN码
-@property (nonatomic, weak) UILabel *priceLabel; // 价格
-@property (nonatomic, weak) UILabel *pagesLabel; // 页数
-@property (nonatomic, strong) UIView *coverView; // 阴影
-@property (nonatomic, copy) NSDictionary *bookInfoDic;
+@property (nonatomic, weak) UILabel *pubdateLabel;       // 出版年
+@property (nonatomic, weak) UILabel *isbnLabel;          // ISBN码
+@property (nonatomic, weak) UILabel *priceLabel;         // 价格
+@property (nonatomic, weak) UILabel *pagesLabel;         // 页数
+@property (nonatomic, strong) UIView *coverView;         // 阴影
+@property (nonatomic, copy) NSDictionary *bookInfoDic;   // 书本信息
 
 @end
 
@@ -58,10 +58,10 @@
     float popupViewW = parentTableView.bounds.size.width - popupViewX * 2;
     float popupViewH = parentTableView.bounds.size.height - popupViewX * 2 - 64;
     self.frame = CGRectMake(popupViewX, popupViewY, popupViewW, popupViewH);
-    self.backgroundColor = [UIColor whiteColor];
     self.alpha = 0.0;
+    self.backgroundColor = [UIColor whiteColor];
     // 圆角
-    self.layer.cornerRadius = 10.0;
+    self.layer.cornerRadius  = 10.0;
     self.layer.masksToBounds = YES;
     [parentTableView addSubview:self];
     [UIView animateWithDuration:0.5 animations:^{
@@ -75,10 +75,10 @@
     float imageY = 10;
     UIImageView *bookImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageX, imageY, imageW, imageH)];
     // 添加四个边阴影
-    bookImageView.layer.shadowColor = [UIColor blackColor].CGColor;
-    bookImageView.layer.shadowOffset = CGSizeMake(0, 0);
+    bookImageView.layer.shadowColor   = [UIColor blackColor].CGColor;
+    bookImageView.layer.shadowOffset  = CGSizeMake(0, 0);
     bookImageView.layer.shadowOpacity = 0.5;
-    bookImageView.layer.shadowRadius = 5.0;
+    bookImageView.layer.shadowRadius  = 5.0;
     [self addSubview:bookImageView];
     self.bookImageView = bookImageView;
     
@@ -193,7 +193,7 @@
     self.backgroundColor = [UIColor whiteColor];
     self.alpha = 0.0;
     // 圆角
-    self.layer.cornerRadius = 10.0;
+    self.layer.cornerRadius  = 10.0;
     self.layer.masksToBounds = YES;
     [parentView addSubview:self];
     [UIView animateWithDuration:0.5 animations:^{
@@ -222,8 +222,8 @@
     float dataW = popupViewW - defauleLabelW - publisherX * 2;
     UILabel *publisherTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(publisherX, publisherY, defauleLabelW, defaultLabelH)];
     publisherTextLabel.font = [UIFont systemFontOfSize:textSize];
-    publisherTextLabel.textColor = [UIColor grayColor];
     publisherTextLabel.text = @"出版社";
+    publisherTextLabel.textColor = [UIColor grayColor];
     publisherTextLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:publisherTextLabel];
     
@@ -238,8 +238,8 @@
     float pubdateY = defaultLabelH + publisherY;
     UILabel *pubdateTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(pubdateX, pubdateY, defauleLabelW, defaultLabelH)];
     pubdateTextLabel.font = [UIFont systemFontOfSize:textSize];
-    pubdateTextLabel.textColor = [UIColor grayColor];
     pubdateTextLabel.text = @"出版年";
+    pubdateTextLabel.textColor = [UIColor grayColor];
     pubdateTextLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:pubdateTextLabel];
     
@@ -254,8 +254,8 @@
     float isbnY = defaultLabelH + pubdateY;
     UILabel *isbnTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(isbnX, isbnY, defauleLabelW, defaultLabelH)];
     isbnTextLabel.font = [UIFont systemFontOfSize:textSize];
-    isbnTextLabel.textColor = [UIColor grayColor];
     isbnTextLabel.text = @"ISBN";
+    isbnTextLabel.textColor = [UIColor grayColor];
     isbnTextLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:isbnTextLabel];
     
@@ -270,8 +270,8 @@
     float priceY = defaultLabelH + isbnY;
     UILabel *priceTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(priceX, priceY, defauleLabelW, defaultLabelH)];
     priceTextLabel.font = [UIFont systemFontOfSize:textSize];
-    priceTextLabel.textColor = [UIColor grayColor];
     priceTextLabel.text = @"价格";
+    priceTextLabel.textColor = [UIColor grayColor];
     priceTextLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:priceTextLabel];
     
@@ -286,8 +286,8 @@
     float pagesY = defaultLabelH + priceY;
     UILabel *pagesTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(pagesX, pagesY, defauleLabelW, defaultLabelH)];
     pagesTextLabel.font = [UIFont systemFontOfSize:textSize];
-    pagesTextLabel.textColor = [UIColor grayColor];
     pagesTextLabel.text = @"页数";
+    pagesTextLabel.textColor = [UIColor grayColor];
     pagesTextLabel.textAlignment = NSTextAlignmentLeft;
     [self addSubview:pagesTextLabel];
     
@@ -306,7 +306,6 @@
     [closeButton setTitle:@"关闭" forState:UIControlStateNormal];
     closeButton.titleLabel.font = [UIFont systemFontOfSize:textSize];
     [closeButton addTarget:self action:@selector(hideCoverAndPopupView) forControlEvents:UIControlEventTouchUpInside];
-    closeButton.titleLabel.font = [UIFont systemFontOfSize:textSize];
     [closeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [closeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
     [self addSubview:closeButton];
