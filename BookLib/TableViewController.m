@@ -17,18 +17,17 @@
 #import "DetailViewController.h"
 #import "PopupView.h"
 #import "Reachability.h"
-//#import "UIImageView+WebCache.h"
 
 @interface TableViewController () <JSONAnalysisDelegate, CameraCaptureControllerDelegate, BooksCollectionViewControllerDelegate, DetailViewControllerDelegate, UICollectionViewDelegate>
 
 @property (nonatomic, strong) BooksCollectionViewController *favoriteCollectionViewController;
 @property (nonatomic, strong) BooksCollectionViewController *readingCollectionViewController;
 @property (nonatomic, strong) BooksCollectionViewController *haveReadCollectionViewController;
-@property (nonatomic, strong) DetailViewController *detailViewController; // 详细信息页
-@property (nonatomic, strong) NSMutableArray *favoriteBookArray; // 存放喜爱的书本信息
-@property (nonatomic, strong) NSMutableArray *readingBookArray; // 存放正在读的书本信息
-@property (nonatomic, strong) NSMutableArray *haveReadBookArray; // 存放已读书本信息
-@property (nonatomic, strong) NSDictionary *currentDic; // 存储当前新增书本信息
+@property (nonatomic, strong) DetailViewController *detailViewController;   // 详细信息页
+@property (nonatomic, strong) NSMutableArray *favoriteBookArray;            // 存放喜爱的书本信息
+@property (nonatomic, strong) NSMutableArray *readingBookArray;             // 存放正在读的书本信息
+@property (nonatomic, strong) NSMutableArray *haveReadBookArray;            // 存放已读书本信息
+@property (nonatomic, strong) NSDictionary *currentDic;                     // 存储当前新增书本信息
 @property (nonatomic, strong) JSONAnalysis *jsonAnalysis;
 @property (nonatomic, strong) TableViewCell *tableViewCell;
 @property (nonatomic, strong) PopupView *popupView;
@@ -73,12 +72,6 @@ static NSString *const reusetableViewCell = @"tableViewCell";
                                                                                    target:self
                                                                                    action:@selector(addBookInfo)];
         self.navigationItem.rightBarButtonItem = addButton;
-        
-//        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"清除缓存"
-//                                                                       style:UIBarButtonItemStylePlain
-//                                                                      target:self
-//                                                                      action:@selector(clickCache)];
-//        self.navigationItem.leftBarButtonItem = cancelButton;
         self.navigationItem.leftBarButtonItem = nil;
         self.title = @"书架";
     } else {
@@ -97,11 +90,9 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     }
 }
 
-//- (void)clickCache {
-//    [[[SDWebImageManager sharedManager] imageCache] clearMemory];
-//    [[NSURLCache sharedURLCache] removeAllCachedResponses];
-//}
-
+/**
+ * 取消添加
+ */
 - (void)cancelToAddBook {
     // 恢复页面滚动
     self.tableView.scrollEnabled = YES;
@@ -109,6 +100,9 @@ static NSString *const reusetableViewCell = @"tableViewCell";
     [self setNavigationBarStyleWithPopupView:NO];
 }
 
+/**
+ * 确定添加
+ */
 - (void)sureToAddBook {
     self.tableView.scrollEnabled = YES;
     // 保存当前书本信息到待读
@@ -119,7 +113,7 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 }
 
 /**
- * 显示选择提示框
+ * 添加书本，显示选择提示框
  */
 - (void)addBookInfo {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -304,7 +298,6 @@ static NSString *const reusetableViewCell = @"tableViewCell";
 -(void)DetailViewControllerDelegate:(DetailViewController *)detailViewController withIndexPath:(NSIndexPath *)indexPath andTableViewCellSection:(NSInteger)section fromBookGroup:(NSString *)bookGroupFrom toBookGroup:(NSString *)bookGroupTo {
     NSMutableArray *arrayFrom = [NSMutableArray array];
     NSMutableArray *arrayTo = [NSMutableArray array];
-    
     // 判断当前所属组
     switch (section) {
         case 0:

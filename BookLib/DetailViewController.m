@@ -13,19 +13,19 @@
 
 @interface DetailViewController ()<UITabBarDelegate>
 
-@property (nonatomic, weak) UIImageView *bookImageView; // 封面
-@property (nonatomic, weak) UILabel *authorTitleLabel; // 作者标题
-@property (nonatomic, weak) UILabel *authorLabel; // 作者
-@property (nonatomic, weak) UILabel *priceTitleLabel; // 价格标题
-@property (nonatomic, weak) UILabel *priceLabel; // 价格
-@property (nonatomic, weak) UILabel *ratingTitleLabel; // 评分标题
-@property (nonatomic, weak) UILabel *ratingLabel; // 评分
-@property (nonatomic, weak) UILabel *copyrightTitleLabel; // 版权信息标题
-@property (nonatomic, weak) UIButton *copyrightButton; // 版权信息按钮
-@property (nonatomic, weak) UIButton *summaryButton; // 内容简介按钮
-@property (nonatomic, weak) UIButton *authorIntroButton; // 作者简介按钮
-@property (nonatomic, weak) UIButton *catalogButton; // 目录按钮
-@property (nonatomic, weak) UITextView *introTextView; // 简介显示文本
+@property (nonatomic, weak) UIImageView *bookImageView;     // 封面
+@property (nonatomic, weak) UILabel *authorTitleLabel;      // 作者标题
+@property (nonatomic, weak) UILabel *authorLabel;           // 作者
+@property (nonatomic, weak) UILabel *priceTitleLabel;       // 价格标题
+@property (nonatomic, weak) UILabel *priceLabel;            // 价格
+@property (nonatomic, weak) UILabel *ratingTitleLabel;      // 评分标题
+@property (nonatomic, weak) UILabel *ratingLabel;           // 评分
+@property (nonatomic, weak) UILabel *copyrightTitleLabel;   // 版权信息标题
+@property (nonatomic, weak) UIButton *copyrightButton;      // 版权信息按钮
+@property (nonatomic, weak) UIButton *summaryButton;        // 内容简介按钮
+@property (nonatomic, weak) UIButton *authorIntroButton;    // 作者简介按钮
+@property (nonatomic, weak) UIButton *catalogButton;        // 目录按钮
+@property (nonatomic, weak) UITextView *introTextView;      // 简介／作者／目录文本内容
 @property (nonatomic, strong) PopupView *popupView;
 @end
 
@@ -220,7 +220,7 @@
     [self.view addSubview:ratingLabel];
     self.ratingLabel = ratingLabel;
     
-    // 作者/内容／目录
+    // 作者/内容／目录文本内容
     float authorIntroX = imageX;
     float authorIntroY = imageY + imageH + 20;
     float authorIntroW = screenWidth - imageX * 2;
@@ -232,7 +232,7 @@
     [self.view addSubview:introTextView];
     self.introTextView = introTextView;
     
-    // 底部标签栏
+    // 底部标签栏 作者/内容／目录
     UITabBar *introTabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, screenHeight - 49, screenWidth, 49)];
     UITabBarItem *summaryItem = [[UITabBarItem alloc] initWithTitle:@"内容" image:[UIImage imageNamed:@"summaryButton"] tag:0];
     UITabBarItem *authorItem = [[UITabBarItem alloc] initWithTitle:@"作者" image:[UIImage imageNamed:@"authorButton"] tag:1];
